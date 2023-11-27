@@ -4,7 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Higher Physics Questions</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Dark Mode CSS Document */
+        
+        a {
+            color: #03C; /* Blue text color */
+        }
+        
+        a:hover {
+            color: #800000; /* Dark red color for hover */
+            text-align: center;
+        }
+        
+        .addtocart {
+            text-align: center;
+        }
+        
+        .banner {
+            background-image: url(Logos/DMbannerfade.png);
+            /* Add background image URL */
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111; /* Dark background */
+            color: #FFF; /* White text color */
+        }
+        
+        .copyright {
+            background-color: #333; /* Dark gray background */
+            color: #FFF; /* White text color */
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .copyright a {
+            text-decoration: underline;
+            color: #03C; /* Blue text color for links */
+        }
+        
+        .copyright a:hover {
+            color: #03C; /* Blue text color for links on hover */
+        }
+        
+        /* Other CSS styles can be added here */
+        
+        div.topmenu {
+            background-color: #222; /* Dark gray background for the top menu */
+            padding: 8px;
+            text-align: left;
+        }
+        
+        div.topmenu a {
+            color: #006eff; /* Dark red color for top menu links */
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: large;
+        }
+        
+        div.topmenu a:hover {
+            color: #F00; /* Red color for top menu links on hover */
+        }
+        
+        .toprow {
+            background-color: #111; /* Dark background for the top row */
+            font-weight: bold;
+        }
+        
+        /* Add more CSS styles for your landing page content as needed */
+        
+        </style>
+        <script>
+            const units = ['Unit 1', 'Unit 2', 'Unit 3'];
+const topics = ['Topic 1', 'Topic 2', 'Topic 3', 'Topic 4', 'Topic 5', 'Topic 6', 'Topic 7', 'Topic 8'];
+const years = [2023, 2022, 2021, 2020, 2019];
+
+const pastPapersData = [];
+
+for (let year of years) {
+    for (let unit of units) {
+        for (let topic of topics) {
+            pastPapersData.push({
+                year,
+                unit,
+                topic,
+                markingInstructionLink: '#' // Add a URL for marking instructions
+            });
+        }
+    }
+}
+
+const unitsList = document.getElementById('units');
+const yearsList = document.getElementById('years');
+const pastPapersList = document.getElementById('pastPapers');
+const randomQuestionButton = document.getElementById('randomQuestionButton');
+
+function generateUnitList() {
+    unitsList.innerHTML = '';
+    units.forEach(unit => {
+        const unitItem = document.createElement('li');
+        unitItem.textContent = unit;
+        unitsList.appendChild(unitItem);
+
+        const topicsList = document.createElement('ul');
+        topicsList.className = 'topics-list';
+        unitItem.appendChild(topicsList);
+
+        topics.forEach(topic => {
+            const topicItem = document.createElement('li');
+            topicItem.textContent = topic;
+            topicsList.appendChild(topicItem);
+        });
+    });
+}
+
+generateUnitList();
+
+function filterPapers() {
+    const selectedUnit = unitsList.querySelector('li:hover').textContent;
+    const selectedYear = yearsList.querySelector('li:hover').textContent;
+
+    pastPapersList.innerHTML = '';
+    pastPapersData.forEach(paper => {
+        if (
+            (selectedUnit === 'All' || paper.unit === selectedUnit) &&
+            (selectedYear === 'All' || paper.year === parseInt(selectedYear))
+        ) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = paper.markingInstructionLink;
+            link.textContent = `${paper.year} - ${paper.unit} - ${paper.topic}`;
+            listItem.appendChild(link);
+            pastPapersList.appendChild(listItem);
+        }
+    });
+}
+
+unitsList.querySelectorAll('li').forEach(li => li.addEventListener('click', filterPapers));
+yearsList.querySelectorAll('li').forEach(li => li.addEventListener('click', filterPapers));
+
+randomQuestionButton.addEventListener('click', () => {
+    const randomIndex = Math.floor(Math.random() * pastPapersData.length);
+    const randomPaper = pastPapersData[randomIndex];
+    alert(`Random Question: ${randomPaper.year} - ${randomPaper.unit} - ${randomPaper.topic}`);
+});
+
+filterPapers();
+
+        </script>
 </head>
 <body>
     <div class="banner">
@@ -36,9 +184,9 @@
 	
 		<p>
 	</p><div class="topmenu">
-		<a href="index.html" title="">homepage</a> 
+		<a href="phy.html" title="">homepage</a> 
 		&nbsp;&nbsp;-&nbsp;&nbsp; 
-		<a href="" title="F">SQA Exam Question Bank</a>
+		<a href="step 2.html" title="F">SQA Exam Question Bank</a>
 		&nbsp;&nbsp;-&nbsp;&nbsp; 
 </div>
 
