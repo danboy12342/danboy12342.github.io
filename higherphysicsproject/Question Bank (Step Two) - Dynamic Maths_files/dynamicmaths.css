@@ -1,0 +1,262 @@
+@charset "utf-8";
+/* Dark Mode CSS Document */
+
+a {
+	color: #03C;
+	/* Blue text color */
+}
+
+a:hover {
+	color: #800000;
+	/* Dark red color for hover */
+	text-align: center;
+}
+
+.addtocart {
+	text-align: center;
+}
+
+.banner {
+	background-image: url(Logos/DMbannerfade.png);
+}
+
+body {
+	font-family: Arial, sans-serif;
+	/* Change font to Arial */
+	background-color: #111;
+	/* Dark background */
+	color: #FFF;
+	/* White text color */
+}
+
+.copyright {
+	background-color: #333;
+	/* Dark gray background */
+	color: #FFF;
+	/* White text color */
+	font-weight: bold;
+	width: 100%;
+}
+
+.copyright a {
+	text-decoration: underline;
+	color: #03C;
+	/* Blue text color for links */
+}
+
+.copyright a:hover {
+	color: #03C;
+	/* Blue text color for links on hover */
+}
+
+.description {
+	font-style: italic;
+	font-size: small;
+	font-weight: bold;
+	color: #900;
+	/* Light red color */
+}
+
+.DMlogo {
+	align-items: right;
+	/* This might not work as expected; check your HTML structure */
+}
+
+.even {
+	background-color: #111;
+	/* Dark background */
+	color: #FFF;
+	/* White text color */
+}
+
+.follow {
+	font-size: small;
+	color: #900;
+	/* Light red color */
+}
+
+.gdpr {
+	font-size: 10px;
+	color: indigo;
+	padding-top: 24px;
+}
+
+h1 {
+	font-weight: bold;
+	font-size: 40px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-align: left;
+}
+
+h1 a {
+	color: #006d80;
+	/* Dark red color for links in h1 */
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	/* Change font to Arial */
+}
+
+h1 a:hover {
+	color: rgb(255, 0, 149);
+	/* Red color for h1 links on hover */
+}
+
+h2 {
+	text-align: center;
+	font-size: x-large;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-transform: uppercase;
+}
+
+hr {
+	border: 2px solid rgb(0, 2, 136);
+	/* Dark red border */
+	margin: 12px;
+}
+
+img {
+	border: none;
+	padding: 6px;
+}
+
+.level {
+	font-size: larger;
+	margin-bottom: 12px;
+	color: #900;
+	/* Light red color */
+}
+
+.links {
+	text-align: center;
+	padding: 3px;
+}
+
+li {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+li a {
+	font-weight: bold;
+}
+
+.menu {
+	alignment-adjust: central;
+	background: #222;
+	/* Dark gray background */
+}
+
+.menutable {
+	border-width: 1px;
+}
+
+.outcomes {
+	border: none;
+	border-collapse: collapse;
+	empty-cells: show;
+	border-color: #FFF;
+	/* White border */
+	border-spacing: 0px;
+}
+
+.outcomes td {
+	vertical-align: top;
+}
+
+.red {
+	color: #F00;
+	/* Red color for elements with the "red" class */
+}
+
+.requiredfield {
+	font-weight: normal;
+	font-size: 10px;
+	text-align: right;
+}
+
+.storemaintable {
+	background: #222;
+	/* Dark gray background for the table */
+	border: 1px solid rgb(86, 0, 136);
+	/* Dark red border for the table */
+	border-collapse: collapse;
+}
+
+.storemaintable td {
+	border-top: 1px solid rgb(0, 14, 136);
+	/* Dark red border for table cell borders */
+	border-bottom: 1px solid rgb(0, 38, 255);
+	/* Dark red border for table cell borders */
+	padding: 12px;
+	vertical-align: top;
+}
+
+.storemaintable li a {
+	font-weight: normal;
+}
+
+.storemaintable .column2 {
+	vertical-align: top;
+	width: 35%;
+}
+
+.storemaintable .column2 td {
+	border: none;
+	margin-top: 72px;
+	padding: 3px;
+	font-weight: bold;
+}
+
+.storemaintable .column2 table {
+	border: 1px rgb(89, 0, 255) double;
+	/* Dark red border for the inner table */
+	align-items: center;
+	align-self: center;
+	width: 95%;
+}
+
+tagline {
+	font-weight: bold;
+	font-size: small;
+	text-align: left;
+}
+
+div.topmenu {
+	background-color: #222;
+	/* Dark gray background for the top menu */
+	padding: 8px;
+	text-align: left;
+}
+
+div.topmenu a {
+	color: #006eff;
+	/* Dark red color for top menu links */
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+	/* Change font to Arial */
+	font-weight: bold;
+	font-size: large;
+}
+
+div.topmenu a:hover {
+	color: #F00;
+	/* Red color for top menu links on hover */
+}
+
+.toprow {
+	background-color: #111;
+	/* Dark background for the top row */
+	font-weight: bold;
+}
+
+.twitter-follow-button {
+	vertical-align: center;
+	/* This might not work as expected; check your HTML structure */
+}
+
+.twittercolumn {
+	vertical-align: top;
+	padding-top: 30px;
+}
