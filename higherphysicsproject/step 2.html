@@ -108,12 +108,9 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     selectedTopics.forEach(topic => {
       const pdfViewer = document.createElement('iframe');
       pdfViewer.width = '800';
+      pdfViewer.height = '800';
       pdfViewer.style.border = '1px solid #ccc';
       pdfViewer.src = `simver/${topic}.pdf`;
-      pdfViewer.onload = function() {
-        // Adjust the height after the content has loaded
-        pdfViewer.height = pdfViewer.contentWindow.document.body.scrollHeight + 'px';
-      };
 
       pdfContainers.appendChild(pdfViewer);
       pdfContainers.appendChild(document.createElement('br'));
