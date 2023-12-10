@@ -43,7 +43,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 	
 		<p>
 	</p><div class="topmenu">
-		<a href="index.html" title="">homepage</a> 
+		<a href="phy.html" title="">homepage</a> 
 		&nbsp;&nbsp;-&nbsp;&nbsp; 
 		<a href="" title="F">SQA Exam Question Bank</a>
 		&nbsp;&nbsp;-&nbsp;&nbsp; 
@@ -51,54 +51,77 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 
 <div id="pagecontent">   <!-- end of included header (php), page content starts here -->
 <form action="" method="get">
+  <form id="physicsForm">
+    <h4>Search for Physics Questions</h4>
+  
+    <p>You have chosen to search for questions at the <strong>Higher Physics</strong> level. You can select the relevant Physics topics below (hold down "ctrl" and click to select more than one topic).</p>
+  
+    <select id="topicSelect" name="topics[]" multiple size="20">
+      <optgroup label="Our Dynamic Universe">
+        <option value="163">Motion - equations</option>
+        <option value="164">Motion - graphs</option>
+        <option value="165">Forces, energy and power</option>
+        <option value="166">Collisions, explosions and impulse</option>
+        <option value="167">Gravitation</option>
+        <option value="168">Special relativity</option>
+        <option value="169">The expanding Universe</option>
+      </optgroup>
+      <optgroup label="Particles and Waves">
+        <option value="171">Forces on charged particles</option>
+        <option value="172">The Standard Model</option>
+        <option value="173">Nuclear reactions</option>
+        <option value="174">Inverse square law</option>
+        <option value="175">Wave particle duality</option>
+        <option value="176">Interference</option>
+        <option value="177">Spectra</option>
+        <option value="178">Refraction of light</option>
+      </optgroup>
+      <optgroup label="Electricity">
+        <option value="179">Monitoring and measuring a.c.</option>
+        <option value="180">Current, potential difference, power and resistance</option>
+        <option value="181">Electrical sources and internal resistance</option>
+        <option value="182">Capacitors</option>
+        <option value="183">Conductors & semiconductors & insulators & Semiconductors and p-n junctions</option>
+      </optgroup>
+      <!-- Add more topic groups and options as needed -->
+    </select>
+  
+    <br><br>
+    <br>
+    <input type="button" value="Display PDFs" onclick="displaySelectedPdfs()">
+  </form>
+  
+  <div id="pdfContainers"></div>
+  
+  <script>
+    function displaySelectedPdfs() {
+      // Get the selected topics
+      const selectedTopics = Array.from(document.getElementById('topicSelect').selectedOptions).map(option => option.value);
+  
+      // Get the container for displaying PDFs
+      const pdfContainers = document.getElementById('pdfContainers');
+      
+      // Clear previous PDFs
+      pdfContainers.innerHTML = '';
+  
+    // Display an iframe for each selected topic
+    selectedTopics.forEach(topic => {
+      const pdfViewer = document.createElement('iframe');
+      pdfViewer.width = '800';
+      pdfViewer.style.border = '1px solid #ccc';
+      pdfViewer.src = `simver/${topic}.pdf`;
+      pdfViewer.onload = function() {
+        // Adjust the height after the content has loaded
+        pdfViewer.height = pdfViewer.contentWindow.document.body.scrollHeight + 'px';
+      };
 
-<fieldset hidden="">
-	<input type="text" name="otherlevellist" value="12,3,5,8,6">
-</fieldset>
-
-<fieldset hidden="">
-	<input type="text" name="how" value="A">
-</fieldset>
-
-<h4>Search for Physics Questions</h4>
-
-<p>You have chosen to search for questions at the <strong>Higher Physics</strong> level. You can select the relevant Physics topics below (hold down "ctrl" and click to select more than one topic).</p>
-
-<select name="topics[]" multiple size="20">
-  <optgroup label="Our Dynamic Universe">
-    <option value="163">Motion - equations and graphs</option>
-    <option value="165">Forces, energy and power</option>
-    <option value="166">Collisions, explosions and impulse</option>
-    <option value="167">Gravitation</option>
-    <option value="168">Special relativity</option>
-    <option value="169">The expanding Universe</option>
-  </optgroup>
-  <optgroup label="Particles and Waves">
-    <option value="171">Forces on charged particles</option>
-    <option value="172">The Standard Model</option>
-    <option value="173">Nuclear reactions</option>
-    <option value="174">Inverse square law</option>
-    <option value="175">Wave particle duality</option>
-    <option value="176">Interference</option>
-    <option value="177">Spectra</option>
-    <option value="178">Refraction of light</option>
-  </optgroup>
-  <optgroup label="Electricity">
-    <option value="179">Monitoring and measuring a.c.</option>
-    <option value="180">Current, potential difference, power and resistance</option>
-    <option value="181">Electrical sources and internal resistance</option>
-    <option value="182">Capacitors</option>
-    <option value="183">Conductors, semiconductors and insulators</option>
-    <option value="184">Semiconductors and p-n junctions</option>
-  </optgroup>
-</select>
-
-
-  <br><br>
-	<br>
-	<input type="submit" value="Find Questions">
-</form>
+      pdfContainers.appendChild(pdfViewer);
+      pdfContainers.appendChild(document.createElement('br'));
+    });
+  }
+</script>
 
 <!--- end of page content -->
 <!-- beginning of included footer (php) -->
-</div>
+</div> 
+</body>
