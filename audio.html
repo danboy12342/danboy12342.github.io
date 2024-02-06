@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.1">
+    <title>borken ass audio player under 42 loc</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>@keyframes quiet {
+        25%{
+          transform: scaleY(.6);
+        }
+        50%{
+          transform: scaleY(.4);
+        }
+        75%{
+          transform: scaleY(.8);
+        }
+      }
+      
+      @keyframes normal {
+        25%{
+          transform: scaleY(1);
+        }
+        50%{
+          transform: scaleY(.4);
+        }
+        75%{
+          transform: scaleY(.6);
+        }
+      }
+      @keyframes loud {
+        25%{
+          transform: scaleY(1);
+        }
+        50%{
+          transform: scaleY(.4);
+        }
+        75%{
+          transform: scaleY(1.2);
+        }
+      }
+      body{
+        display: flex;
+        justify-content: center;
+        background: black;
+        margin: 0;padding: 0;
+        align-items: center;
+        height: 100vh;
+      }
+      
+      .boxContainer{
+        display: flex;
+        justify-content: space-between;
+        height: 64px;
+        --boxSize: 8px;
+        --gutter: 4px;
+        width: calc((var(--boxSize) + var(--gutter)) * 5);
+      }
+      
+      .box{
+        transform: scaleY(.4);
+        height: 100%;
+        width: var(--boxSize);
+        background: #12E2DC;
+        animation-duration: 1.2s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        border-radius: 8px;
+      }
+      
+      .box1{
+        animation-name: quiet;
+      }
+      
+      .box2{
+        animation-name: normal;
+      }
+      
+      .box3{
+        animation-name: quiet;
+      }
+      
+      .box4{
+        animation-name: loud;
+      }
+      
+      .box5{
+        animation-name: quiet;
+      }
+      
+      p {
+  font-family: "Montserrat", monospace;
+  color: rgb(255, 255, 255);
+
+}
+      </style>
+    </head>
+    <body>
+        <div class="boxContainer">
+            <div class="box box1"></div>
+            <div class="box box2"></div>
+            <div class="box box3"></div>
+            <div class="box box4"></div>
+            <div class="box box5"></div>
+          </div>
+  <br><br>
+<p>2023 <br>Nationstates N-Day  <br>A.N.A.L bunker VC <br>part 7 THE SUPER BARAGE part 3 <br>(the return of the nukes <br>and a step up from last years <br>part 2 super ass attack with max pennetration <br>feat. conor the catboy and atlae)</p>
+<br><br><br><br>
+<p>from the album: <br> 2023 Nationstates N-Day from the coalition view</p>
+<br><br><br>
+<p>256kps mono mp3: <a href="index.html">i</a></p>
+  <audio controls autoplay>
+    <source src="part 7 THE SUPER BARAGE part 3.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+  </audio>
+</body>
+</html>
