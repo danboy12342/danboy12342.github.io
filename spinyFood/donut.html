@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" />
+    <title>SpinnyFood.py as JavaScript</title>
+    <style>
+        body {
+            font-family: monospace;
+            white-space: pre;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="donut"></div>
+    <script>
+        const screen_size = 40;
+        const theta_spacing = 0.07;
+        const phi_spacing = 0.02;
+        const illumination = ".,-~:;=!*#$@";
+
+        let A = 1;
+        let B = 1;
+        const R1 = 1;
+        const R2 = 2;
+        const K2 = 5;
+        const K1 = screen_size * K2 * 3 / (8 * (R1 + R2));
+
+        function render_frame(A, B) {
+            const cos_A = Math.cos(A);
+            const sin_A = Math.sin(A);
+            const cos_B = Math.cos(B);
+            const sin_B = Math.sin(B);
+
+            const output = Array(screen_size).fill().map(() => Array(screen_size).fill(' '));
+            const zbuffer = Array(screen_size).fill().map(() => Array(screen_size).fill(0));
+
+            for (let phi = 0; phi < 2 * Math.PI; phi += phi_spacing) {
+                const cos_phi = Math.cos(phi);
+                const sin_phi = Math.sin(phi);
+
+                for (let theta = 0; theta < 2 * Math.PI; theta += theta_spacing) {
+                    const cos_theta = Math.cos(theta);
+                    const sin_theta = Math.sin(theta);
+
+                    const circle_x = R2 + R1 * cos_theta;
+                    const circle_y = R1 * sin_theta;
+
+                    const x = (cos_B * cos_phi + sin_A * sin_B * sin_phi) * circle_x - cos_A * sin_B * circle_y;
+                    const y = (sin_B * cos_phi - sin_A * cos_B * sin_phi) * circle_x + cos_A * cos_B * circle_y;
+                    const z = K2 + cos_A * sin_phi * circle_x + sin_A * circle_y;
+
+                    const ooz = 1 / z;
+                    const xp = Math.floor(screen_size / 2 + K1 * ooz * x);
+                    const yp = Math.floor(screen_size / 2 - K1 * ooz * y);
+
+                    const L = cos_phi * cos_theta * sin_B - cos_A * sin_phi * cos_theta - sin_A * sin_theta + cos_B * (cos_A * sin_theta - sin_phi * cos_theta * sin_A);
+
+                    if (L > 0) {
+                        const L_index = Math.round(L * 8);
+                        if (L_index >= 0 && L_index < illumination.length) {
+                            if (ooz > zbuffer[xp][yp]) {
+                                zbuffer[xp][yp] = ooz;
+                                output[xp][yp] = illumination[L_index];
+                            }
+                        }
+                    }
+                }
+            }
+            return output;
+        }
+
+        function render() {
+            A += theta_spacing;
+            B += phi_spacing;
+            const frame = render_frame(A, B);
+            let outputStr = "";
+            for (let row of frame) {
+                outputStr += row.join('') + "\n";
+            }
+            document.getElementById("donut").innerText = outputStr;
+        }
+
+        setInterval(render, 30);
+    </script>
+</body>
+</html>
