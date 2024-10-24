@@ -40,7 +40,7 @@ body {
   width: 100%;
   position: absolute;
   z-index: 2;
-  backdrop-filter: blur(10vmax);
+  backdrop-filter: blur(12px);
 }
 
 h1 {

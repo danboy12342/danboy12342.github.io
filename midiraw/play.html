@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon.ico" />
+
+    <title>Music Stuff</title>
+
+    <!-- The website stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/ce059f7ba1.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
+    <style>
+          #file-input {
+        /* Basic styling for the file input */
+        background-color: white; /* Set a contrasting background color */
+        color: black; /* Set a contrasting text color */
+        border: 1px solid #ccc; /* Add a border for visual separation */
+        padding: 10px; /* Add some padding for readability */
+        border-radius: 5px; /* Add rounded corners for a modern look */
+      }
+
+      /* Adjust the appearance of the "Choose File" button */
+      #file-input::-webkit-file-upload-button {
+        /* For Chrome, Safari, and Opera */
+        background-color: #4CAF50; /* Set a button color */
+        color: white; /* Set the button text color */
+        padding: 10px 20px; /* Add padding to the button */
+        border: none; /* Remove default button border */
+        border-radius: 5px; /* Add rounded corners to the button */
+        cursor: pointer; /* Change the cursor to a pointer on hover */
+      }
+
+      #file-input::-webkit-file-upload-button:hover {
+        /* Styling for the button on hover */
+        background-color: #45a049; /* Change the button color on hover */
+      }
+
+      /* Style for the text within the file input */
+      #file-input::placeholder {
+        /* For browsers that support placeholders */
+        color: #666; /* Set the placeholder text color */
+      }
+
+          /* Custom player style */
+          #section3 midi-player {
+            background-color: #EB459E;
+            display: block;
+            width: inherit;
+            margin: 4px;
+            margin-bottom: 0;
+          }
+          #section3 midi-player::part(control-panel) {
+            background: #EB459E;
+            border: 2px solid #000;
+            border-radius: 10px 10px 0 0;
+          }
+          #section3 midi-player::part(play-button) {
+            color: #353;
+            border: 2px solid currentColor;
+            background-color: #4d4;
+            border-radius: 20px;
+            transition: all 0.2s;
+            content: 'hello';
+          }
+          #section3 midi-player::part(play-button):hover {
+            color: #0a0;
+            background-color: #5f5;
+            border-radius: 10px;
+          }
+          #section3 midi-player::part(time) {
+            font-family: monospace;
+          }
+
+          /* Custom visualizer style */
+          #section3 midi-visualizer .piano-roll-visualizer {
+            background: #2C2F33;
+            border: 2px #FEE75C;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            margin: 4px;
+            margin-top: 0;
+            overflow: auto;
+          }
+          #section3 midi-visualizer svg rect.note {
+            fill: white;
+            opacity: 0.7;
+            stroke-width: 2;
+          }
+          #section3 midi-visualizer svg rect.note[data-instrument="0"] {
+            fill: #e22;
+            stroke: #500;
+          }
+          #section3 midi-visualizer svg rect.note[data-instrument="2"] {
+            fill: #2ee;
+            stroke: #055;
+          }
+          #section3 midi-visualizer svg rect.note[data-is-drum="true"] {
+            fill: pink;
+            stroke: #888;
+          }
+          #section3 midi-visualizer svg rect.note.active {
+            stroke-opacity: 1;
+            opacity: 0.99;
+            stroke: #FEE75C;
+          }
+    </style>
+  </head>
+  <body style="background-color: #1F1F1F">
+    <section id="section3">
+      <!-- File selection dropdown -->
+      <select id="file-select">
+        <option value="/midiraw/Unreal Superhero 3.mid">
+          Unreal Superhero 3
+        </option>
+        <option value="/midiraw/Lagtrain.mid">Lagtrain</option>
+        <option
+          value="/midiraw/3546934 å °ç £ å»–ç›Šå¾·+æ®·å¿—è±ª æ¨¹æž—é«˜ä¸­ wip.mid"
+        >
+          台灣廖益德+殷志豪 樹林高中 wip
+        </option>
+        <option value="/midiraw/A Cup Of Liber-Tea WIP.mid">
+          A Cup Of Liber-Tea WIP
+        </option>
+        <option value="/midiraw/af_psg.mid">af_psg</option>
+        <option
+          value="/midiraw/Beauty of Annihilation _ Call of Duty_ World at War.mid"
+        >
+          Beauty of Annihilation - Call of Duty: World at War
+        </option>
+        <option value="/midiraw/BeverlyHillsCopThemeSong.mid">
+          Beverly Hills Cop Theme Song
+        </option>
+        <option value="/midiraw/Bubble Tea.mid">Bubble Tea</option>
+        <option value="/midiraw/CRACKED KOTO 2 BABY.mid">
+          CRACKED KOTO 2 BABY
+        </option>
+        <option value="/midiraw/Equals My Nutsack.mid">
+          Equals My Nutsack
+        </option>
+        <option value="/midiraw/ghost rule.mid">
+          Ghost rule - deco_18_feat_Miku
+        </option>
+        <option value="/midiraw/Helldivers 2 theme (WIP alt).mid">
+          Helldivers 2 theme (WIP alt)
+        </option>
+        <option
+          value="/midiraw/im stuck at school cuz its a half day and i cant get picked up for another 3 hours.mid"
+        >
+          im stuck at school cuz its a half day and i cant get picked up for
+          another 3 hours
+        </option>
+        <option value="/midiraw/jaez.mid">jaez</option>
+        <option value="/midiraw/KickBack - AKA - My pointer finger hurt.mid">
+          KickBack - AKA - My pointer finger hurt
+        </option>
+        <option value="/midiraw/mischievous little demonic skelly shop.mid">
+          mischievous little demonic skelly shop
+        </option>
+        <option
+          value="/midiraw/Phoenix Wright Ace Attorney ~ Objection! 2001.mid"
+        >
+          Phoenix Wright Ace Attorney - Objection! 2001
+        </option>
+        <option
+          value="/midiraw/Pirates of the Caribbean - He's a Pirate (1).mid"
+        >
+          Pirates of the Caribbean - He's a Pirate
+        </option>
+        <option value="/midiraw/Pokemon as a 1960s Western Movie.mid">
+          Pokemon as a 1960s Western Movie
+        </option>
+        <option value="/midiraw/scp 3008.mid">3008</option>
+        <option value="/midiraw/rockefeller street nightcore.mid">
+          rockefeller street nightcore
+        </option>
+        <option value="/midiraw/sex balls (wip).mid">sex balls</option>
+        <option value="/midiraw/Stayed Gone - Hazbin Hotel .mid">
+          Stayed Gone - Hazbin Hotel
+        </option>
+        <option value="/midiraw/tankalternate.mid">tankalternate</option>
+        <option value="/midiraw/tankfl8p.mid">tankfl8p</option>
+        <option
+          value="/midiraw/TouHou_ the Embodiment of Scarlet Devil - U.N. Owen was her_.mid"
+        >
+          TouHou - the Embodiment of Scarlet Devil - U.N. Owen was her
+        </option>
+        <option value="/midiraw/Upper Brinstar - Super Metroid.mid">
+          Upper Brinstar - Super Metroid
+        </option>
+        <option value="/midiraw/v.2 Ultimate Battle (PvZ1 + PvZ2).mid">
+          v.2 Ultimate Battle (PvZ1 + PvZ2)
+        </option>
+        <option value="/midiraw/WHAT THE ACTUAL PHONK IS THIS.mid">
+          WHAT THE ACTUAL PHONK IS THIS
+        </option>
+        <option
+          value="/midiraw/WIP - Cats on Mars _á   - Ë• -ãƒž â³Š - Cowboy Bebop.mid"
+        >
+          WIP - Cats on Mars
+        </option>
+        <option value="/midiraw/Song That Might Play When You Fight Sans.mid">
+          my current WIP
+          [fetchedonpetrons.dwsm/per/sc/GBDM0012/M/FL/live/pl112/SCUK/DMPROJ/live/midi/furncurr/2487/gi/ID]
+        </option>
+      </select>
+      <!-- File input for uploading custom MIDI files -->
+      <input type="file" id="file-input" accept=".mid,.midi" />
+      <midi-player
+        id="midi-player"
+        src=""
+        sound-font
+        visualizer="#section3 midi-visualizer"
+      >
+      </midi-player>
+      <midi-visualizer id="midi-visualizer" src=""> </midi-visualizer>
+    </section>
+    <script>
+            document.getElementById('file-select').addEventListener('change', function(event) {
+              const selectedFile = event.target.value;
+              if (selectedFile) {
+                const fileURL = selectedFile; // Assuming MIDI files are in the same directory
+                updateMIDIPlayer(fileURL);
+              }
+            });
+
+            document.getElementById('file-input').addEventListener('change', function(event) {
+              const file = event.target.files[0];
+              if (file) {
+                const fileURL = URL.createObjectURL(file);
+                updateMIDIPlayer(fileURL);
+              }
+            });
+
+            function updateMIDIPlayer(fileURL) {
+              const midiPlayer = document.getElementById('midi-player');
+              const midiVisualizer = document.getElementById('midi-visualizer');
+
+              midiPlayer.setAttribute('src', fileURL);
+              midiVisualizer.setAttribute('src', fileURL);
+            }
+
+           const fileInput = document.getElementById('file-input');
+      const filenameDisplay = document.getElementById('filename-display');
+
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          filenameDisplay.textContent = file.name;
+        } else {
+          filenameDisplay.textContent = 'No file chosen';
+        }
+      });
+    </script>
+
+    <br />
+    <a
+      id="source-link"
+      class="meta-link"
+      href="filesystem.html"
+      target="_blank"
+    >
+      <span><i class="fa-solid fa-cat"></i></span>
+    </a>
+  </body>
+</html>

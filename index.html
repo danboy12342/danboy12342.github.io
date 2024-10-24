@@ -9,68 +9,507 @@
 
     <!-- The website stylesheet -->
     <link rel="stylesheet" href="/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
     <script
       src="https://kit.fontawesome.com/ce059f7ba1.js"
       crossorigin="anonymous"
     ></script>
     <!-- The website JavaScript file -->
     <script src="/script.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqk1w2MSFHeLlZPAekL/cx9Z9gJvR5SrMuPFm3/i30un001bzDbceG/T6qun7Z5j+jJI0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+              :root {
+                --red-rgb: 248 113 113;
+                --blue-rgb: 56 189 248;
+                --green-rgb: 74 222 128;
+                --yellow-rgb: 253 224 71;
+
+                --background-rgb: 0 0 0;
+                --color-1: #87CEEB; /* Light Sky Blue */
+                --color-2: #00b5ff; /* Dodger Blue */
+                --color-3: #EB459E; /*  Pale Violet Red */
+                --color-4: #5865F2; /*  Indigo */
+                --color-5: #F08080; /*  Light Coral */
+                --color-6: #FFC0CB; /*  Pink */
+                --color-7: #FFA07A; /*  Light Salmon */
+                --purple: #800080; /* Purple */
+              }
+
+            .ubuntu-regular {
+              font-family: "Ubuntu", sans-serif;
+              font-weight: 400;
+              font-style: normal;
+            }
+
+              body {
+                height: 100vh;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgb(var(--background-rgb));
+                overflow: hidden;
+                perspective: 2000px;
+                font-family: "Ubuntu", sans-serif;
+                font-size: 16px; /* Changed font size to 16px */
+                font-weight: 500;
+              }
+
+              * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+              }
+
+              #container {
+                width: 140rem;
+                aspect-ratio: 1;
+                display: grid;
+                grid-template-rows: repeat(40, 1fr);
+                grid-template-columns: repeat(40, 1fr);
+                position: absolute;
+                transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(1.25);
+              }
+
+              #container:after,
+              #container:before {
+                content: "";
+                position: absolute;
+                inset: 0px;
+                pointer-events: none;
+              }
+
+              #container:before {
+                z-index: 2;
+                background-image: url("https://assets.codepen.io/1468070/plus-pattern-center.png");
+                background-size: 5%;
+                background-repeat: repeat;
+                opacity: 0.25;
+              }
+
+              #container:after {
+                z-index: 3;
+                background: radial-gradient(circle, transparent 25%, rgb(var(--background-rgb)) 80%);
+              }
+
+              .tile {
+                border: 1px solid rgb(255 255 255 / 25%);
+                transition: background-color 1500ms;
+              }
+
+              .tile:hover {
+                transition-duration: 0ms;
+              }
+
+              .tile:nth-child(4n):hover {
+                background-color: var(--color-1); /* Light Sky Blue */
+              }
+
+              .tile:nth-child(4n + 1):hover {
+                background-color: var(--color-2); /* Dodger Blue */
+              }
+
+              .tile:nth-child(4n + 2):hover {
+                background-color: var(--color-3); /* Pale Violet Red */
+              }
+
+              .tile:nth-child(4n + 3):hover {
+                background-color: var(--color-4); /* Indigo */
+              }
+
+              .tile:nth-child(7n):hover {
+                background-color: var(--color-2); /* Dodger Blue */
+              }
+
+              .tile:nth-child(7n + 3):hover {
+                background-color: var(--color-3); /* Pale Violet Red */
+              }
+
+              .tile:nth-child(7n + 5):hover {
+                background-color: var(--color-4); /* Indigo */
+              }
+
+              .tile:nth-child(7n + 6):hover {
+                background-color: var(--color-1); /* Light Sky Blue */
+              }
+
+              .tile:nth-child(11n + 1):hover {
+                background-color: var(--color-1); /* Light Sky Blue */
+              }
+
+              .tile:nth-child(11n + 4):hover {
+                background-color: var(--color-2); /* Dodger Blue */
+              }
+
+              .tile:nth-child(11n + 7):hover {
+                background-color: var(--color-3); /* Pale Violet Red */
+              }
+
+              .tile:nth-child(11n + 10):hover {
+                background-color: var(--color-4); /* Indigo */
+              }
+
+              /* Links */
+              #links {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                display: flex;
+                gap: 10px;
+              }
+
+              .meta-link {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+              }
+
+              .label {
+                color: white;
+                font-size: 1.2rem;
+                font-weight: bold;
+              }
+
+              .dot {
+                color: white;
+              }
+
+              .source, .youtube {
+                color: var(--purple); /* Purple */
+                text-decoration: none;
+                font-weight: normal; /* Normal font weight for links */
+              }
+
+              .source i, .youtube i {
+                font-size: 1.5rem;
+                color: var(--purple); /* Purple */
+              }
+
+              /* Terminal Window */
+              #terminal-window {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                background: #020202;
+                border-top: 20px solid #c4c4c4;
+                border-radius: .25rem;
+                box-shadow: 4px 1px 11px rgba(0, 0, 0, 0.22);
+                min-height: 425px;
+                max-width: 600px;
+                min-width: 350px;
+                padding: 0.5rem;
+                position: relative;
+                width: 100%;
+                z-index: 100; /* Make it appear on top */
+              }
+
+              #terminal-window::before {
+                background: #747474;
+                border-radius: 50%;
+                content: "";
+                display: block;
+                height: 10px;
+                position: absolute;
+                top: -15px;
+                left: 5px;
+                width: 10px;
+              }
+
+              #terminal-prompt {
+                font-weight: bold;
+                color: white;
+                font-size: 16px; /* Changed font size to 16px */
+              }
+
+              .neofetch-output {
+                color: white;
+                font-weight: normal;
+                margin-top: 5px;
+                display: flex;
+                align-items: center; /* Align items vertically */
+              }
+
+              .neofetch-line {
+                display: flex;
+                align-items: center;
+                margin-bottom: 5px;
+              }
+
+              .neofetch-icon {
+                margin-right: 10px;
+                font-size: 1.2em;
+                color: #ff79c6;
+              }
+
+              .neofetch-label {
+                font-weight: bold;
+                font-size: 16px; /* Changed font size to 16px */
+              }
+
+              .neofetch-value {
+                margin-left: auto;
+                font-size: 16px; /* Changed font size to 16px */
+              }
+
+              /* Terminal Lines */
+              .terminal-lines {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+              }
+
+              .terminal-line {
+                color: white;
+                margin-top: 0.15rem;
+                position: relative;
+                font-size: 16px; /* Changed font size to 16px */
+              }
+
+              .terminal-blinker {
+                animation: .8s blink infinite;
+                background: white;
+                display: inline-block;
+                height: calc(12px + 0.25vw);
+                margin-bottom: -1px;
+                padding-bottom: 3px;
+                width: 8px;
+              }
+
+              @keyframes blink {
+                from {
+                  opacity: 0;
+                }
+
+                to {
+                  opacity: 1;
+                }
+              }
+
+              /* Neofetch Output */
+              .neofetch-output-container {
+                color: white;
+                display: flex;
+                font-size: calc(9px + 0.25vw);
+                padding: 0.5rem;
+                position: relative;
+              }
+
+              .neofetch-output-container svg {
+                max-width: 200px;
+                padding: 0.5rem;
+                width: 100%;
+              }
+
+              .neofetch-output-list {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 0 0.5rem;
+              }
+
+              .neofetch-cyan {
+                color: cyan;
+                font-size: 16px; /* Changed font size to 16px */
+              }
+
+              .neofetch-block {
+                background: ${props => props.color};
+                display: inline-block;
+                height: 20px; /* Changed height to 20px */
+                margin-top: 0.5rem;
+                width: 20px; /* Changed width to 20px */
+              }
+
+              .neofetch-block:first-of-type {
+                margin-left: 1rem;
+              }
+
+              .neofetch-icon{
+                margin-right: 10px;
+                font-size: 2em; /* Changed size to 2em */
+                color: #ff79c6;
+              }
+
+              .neofetch-icon img { /* Added img styles for image placeholder */
+                width: 132px; /* Adjust width as needed */
+                height: 122px; /* Adjust height as needed */
+                margin-right: 10px; /* Adjust margin as needed */
+              }
+
+              .blinking-cursor {
+        font-weight: 100;
+        font-size: 30px;
+        color: white;
+        -webkit-animation: 1s blink step-end infinite;
+        -moz-animation: 1s blink step-end infinite;
+        -ms-animation: 1s blink step-end infinite;
+        -o-animation: 1s blink step-end infinite;
+        animation: 1s blink step-end infinite;
+      }
+
+      @keyframes "blink" {
+        from, to {
+          color: transparent;
+        }
+        50% {
+          color: white;
+        }
+      }
+
+      @-moz-keyframes blink {
+        from, to {
+          color: transparent;
+        }
+        50% {
+          color: white;
+        }
+      }
+
+      @-webkit-keyframes "blink" {
+        from, to {
+          color: transparent;
+        }
+        50% {
+          color: white;
+        }
+      }
+
+      @-ms-keyframes "blink" {
+        from, to {
+          color: transparent;
+        }
+        50% {
+          color: white;
+        }
+      }
+
+      @-o-keyframes "blink" {
+        from, to {
+          color: transparent;
+        }
+        50% {
+          color: white;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="blob"></div>
-    <div id="blur"></div>
-    <a href="https://www.youtube.com/@strangestuffYT">
-      <h1 data-value="STRANGESTUFF">STRANGESTUFF</h1>
-    </a>
+    <div id="terminal-window">
+      <div id="terminal-prompt">user@host:~$</div>
+      <ul class="terminal-lines">
+        <li class="terminal-line">nominal sys</li>
+        <li class="terminal-line">$ neofetch</li>
+        <div class="neofetch-output-container">
+          <span class="neofetch-icon">
+            <img src="intro_strangestuff.svg" alt="Neofetch Icon" />
+          </span>
+          <ul class="neofetch-output-list">
+            <li>
+              <span class="neofetch-cyan">Strange Stuff</span>@<span
+                class="neofetch-cyan"
+                >youtube</span
+              >
+            </li>
+            <li>-----------------</li>
+            <li><span class="neofetch-cyan">OS</span>: YiOS</li>
+            <li><span class="neofetch-cyan">Host</span>: Nekoweb</li>
+            <li><span class="neofetch-cyan">Kernel</span>: 4.20.69-nice</li>
+            <li>
+              <span class="neofetch-cyan">Uptime</span>: far too long at this
+              point
+            </li>
+            <li>
+              <span class="neofetch-cyan">Packages</span>: 18 (enough to party)
+            </li>
+            <li><span class="neofetch-cyan">Shell</span>: bash 5.0.3</li>
+            <li><span class="neofetch-cyan">Resolution</span>: SMALLxSMALL</li>
+            <li><span class="neofetch-cyan">Terminal</span>: alacritty</li>
+            <li>
+              <span class="neofetch-cyan"
+                ><i class="fa-brands fa-youtube"></i></span
+              >:
+              <a href="https://www.youtube.com/@strangestuffYT"
+                >StrangeStuffYT</a
+              >
+            </li>
+            <li>
+              <span class="neofetch-cyan"
+                ><i class="fa-solid fa-music"></i></span
+              >:
+              <a href="midiraw/play.html">my music</a>
+            </li>
+            <li>
+              <span class="neofetch-cyan">art</span>:
+              <a href="https://www.behance.net/danboy12342mui"
+                ><i class="fa-brands fa-behance"></i>hance</a
+              >
+            </li>
+            <li>
+              <span class="neofetch-cyan">main page</span>:<a
+                href="old_index.html"
+              >
+                <i class="fa-solid fa-window-maximize"></i
+              ></a>
+            </li>
+            <li>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-1);"
+              ></div>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-2);"
+              ></div>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-3);"
+              ></div>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-4);"
+              ></div>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-5);"
+              ></div>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-6);"
+              ></div>
+              <div
+                class="neofetch-block"
+                style="background-color: var(--color-7);"
+              ></div>
+            </li>
 
-    <div id="menu">
-      <button type="button" id="menu-toggle">
-        <span class="line"></span>
-        <span class="line"></span>
-        <span class="line"></span>
-        <div id="menu-toggle-label"></div>
-      </button>
-      <div id="menu-gradient"></div>
-      <div id="menu-gradient-blur"></div>
-      <div id="menu-arcs-wrapper">
-        <svg id="menu-arcs">
-          <circle class="menu-arc" cx="50%" cy="50%" r="18%"></circle>
-          <circle class="menu-arc" cx="50%" cy="50%" r="30%"></circle>
-          <circle class="menu-arc" cx="50%" cy="50%" r="42%"></circle>
-        </svg>
-      </div>
-      <div id="menu-links">
-        <a
-          class="link"
-          href="https://www.behance.net/danboy12342mui"
-          target="_blank"
-        >
-          <span class="anchor"></span>
-          <span class="index">00</span>
-          <span class="label"><i class="fa-brands fa-behance"></i>hance</span>
-        </a>
-        <a class="link" href="midiraw/play.html" target="_blank">
-          <span class="anchor"></span>
-          <span class="index">01</span>
-          <span class="label"><i class="fa-solid fa-music"></i>Music</span>
-        </a>
-        <a class="link" href="higherphysicsproject/phy.html" target="_blank">
-          <span class="anchor"></span>
-          <span class="index">02</span>
-          <span class="label"
-            ><i class="fa-solid fa-rectangle-list"></i>Q's Bank</span
-          >
-        </a>
-        <a class="link" href="lookswtf.html" target="_blank">
-          <span class="anchor"></span>
-          <span class="index">03</span>
-          <span class="label">looks</span>
-        </a>
-      </div>
+            <!--not currently used <span class="blinking-cursor">|</span>-->
+          </ul>
+        </div>
+      </ul>
     </div>
-    <!-- fix div layering toDO -->
 
-    <!-- magic super link page -->
+    <div id="container">
+      <div class="tile"></div>
+    </div>
+
+    <script>
+      const container = document.querySelector("#container"),
+      tile = document.querySelector(".tile");
+
+      for(let i = 0; i < 1599; i++) {
+        container.appendChild(tile.cloneNode());
+      }
+    </script>
     <a
       id="source-link"
       class="meta-link"

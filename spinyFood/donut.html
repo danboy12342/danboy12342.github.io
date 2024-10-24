@@ -1,90 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="favicon.ico" />
     <title>SpinnyFood.py as JavaScript</title>
     <style>
-        body {
-            font-family: monospace;
-            white-space: pre;
-            background-color: black;
-            color: white;
-        }
+      body {
+          font-family: monospace;
+          white-space: pre;
+          background-color: black;
+          color: white;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- SCM Music Player https://www.scmplayer.net -->
+    <script
+      type="text/javascript"
+      src="https://www.scmplayer.net/script.js"
+      data-config="{'skin':'skins/black/skin.css','volume':15,'autoplay':true,'shuffle':false,'repeat':1,'placement':'top','showplaylist':false,'playlist':[{'title':'Bubble Tea','url':'https://youtu.be/VAWFGYRPID0?si=ouQV22xrc2OhUXXP'},{'title':'Yubin %uC219%uB140 (%u6DD1%u5973)','url':'https://youtu.be/2MiQonPvlVM'},{'title':'Neon','url':'https://youtu.be/PhCJa2Vf6mo?si=V9Ac4ujhgPCvbRvH'},{'title':'RPG','url':'https://youtu.be/E286KqzpkKw'},{'title':'Sanik','url':'https://youtu.be/OAlqXJNy2cs?si=V-2AQ_vaI4KaC7Bg'},{'title':'Surf','url':'https://youtu.be/EFlOnFR5yNM?si=wu6V4uP6_k5NqoPN'},{'title':'Damn Good Day','url':'https://youtu.be/PUJ9qXbLyfE?si=Vm3PeAm49kBopK7X'},{'title':'loser ','url':'https://youtu.be/icraqaFgVwg'},{'title':'wii wii woo','url':'https://youtu.be/r1ZVPTCOCSQ?si=Zxa4MKtOOJQyXbDX'}]}"
+    ></script>
+    <!-- SCM Music Player script end -->
+
     <div id="donut"></div>
     <script>
-        const screen_size = 40;
-        const theta_spacing = 0.07;
-        const phi_spacing = 0.02;
-        const illumination = ".,-~:;=!*#$@";
+      const screen_size = 40;
+      const theta_spacing = 0.07;
+      const phi_spacing = 0.02;
+      const illumination = ".,-~:;=!*#$@";
 
-        let A = 1;
-        let B = 1;
-        const R1 = 1;
-        const R2 = 2;
-        const K2 = 5;
-        const K1 = screen_size * K2 * 3 / (8 * (R1 + R2));
+      let A = 1;
+      let B = 1;
+      const R1 = 1;
+      const R2 = 2;
+      const K2 = 5;
+      const K1 = screen_size * K2 * 3 / (8 * (R1 + R2));
 
-        function render_frame(A, B) {
-            const cos_A = Math.cos(A);
-            const sin_A = Math.sin(A);
-            const cos_B = Math.cos(B);
-            const sin_B = Math.sin(B);
+      function render_frame(A, B) {
+          const cos_A = Math.cos(A);
+          const sin_A = Math.sin(A);
+          const cos_B = Math.cos(B);
+          const sin_B = Math.sin(B);
 
-            const output = Array(screen_size).fill().map(() => Array(screen_size).fill(' '));
-            const zbuffer = Array(screen_size).fill().map(() => Array(screen_size).fill(0));
+          const output = Array(screen_size).fill().map(() => Array(screen_size).fill(' '));
+          const zbuffer = Array(screen_size).fill().map(() => Array(screen_size).fill(0));
 
-            for (let phi = 0; phi < 2 * Math.PI; phi += phi_spacing) {
-                const cos_phi = Math.cos(phi);
-                const sin_phi = Math.sin(phi);
+          for (let phi = 0; phi < 2 * Math.PI; phi += phi_spacing) {
+              const cos_phi = Math.cos(phi);
+              const sin_phi = Math.sin(phi);
 
-                for (let theta = 0; theta < 2 * Math.PI; theta += theta_spacing) {
-                    const cos_theta = Math.cos(theta);
-                    const sin_theta = Math.sin(theta);
+              for (let theta = 0; theta < 2 * Math.PI; theta += theta_spacing) {
+                  const cos_theta = Math.cos(theta);
+                  const sin_theta = Math.sin(theta);
 
-                    const circle_x = R2 + R1 * cos_theta;
-                    const circle_y = R1 * sin_theta;
+                  const circle_x = R2 + R1 * cos_theta;
+                  const circle_y = R1 * sin_theta;
 
-                    const x = (cos_B * cos_phi + sin_A * sin_B * sin_phi) * circle_x - cos_A * sin_B * circle_y;
-                    const y = (sin_B * cos_phi - sin_A * cos_B * sin_phi) * circle_x + cos_A * cos_B * circle_y;
-                    const z = K2 + cos_A * sin_phi * circle_x + sin_A * circle_y;
+                  const x = (cos_B * cos_phi + sin_A * sin_B * sin_phi) * circle_x - cos_A * sin_B * circle_y;
+                  const y = (sin_B * cos_phi - sin_A * cos_B * sin_phi) * circle_x + cos_A * cos_B * circle_y;
+                  const z = K2 + cos_A * sin_phi * circle_x + sin_A * circle_y;
 
-                    const ooz = 1 / z;
-                    const xp = Math.floor(screen_size / 2 + K1 * ooz * x);
-                    const yp = Math.floor(screen_size / 2 - K1 * ooz * y);
+                  const ooz = 1 / z;
+                  const xp = Math.floor(screen_size / 2 + K1 * ooz * x);
+                  const yp = Math.floor(screen_size / 2 - K1 * ooz * y);
 
-                    const L = cos_phi * cos_theta * sin_B - cos_A * sin_phi * cos_theta - sin_A * sin_theta + cos_B * (cos_A * sin_theta - sin_phi * cos_theta * sin_A);
+                  const L = cos_phi * cos_theta * sin_B - cos_A * sin_phi * cos_theta - sin_A * sin_theta + cos_B * (cos_A * sin_theta - sin_phi * cos_theta * sin_A);
 
-                    if (L > 0) {
-                        const L_index = Math.round(L * 8);
-                        if (L_index >= 0 && L_index < illumination.length) {
-                            if (ooz > zbuffer[xp][yp]) {
-                                zbuffer[xp][yp] = ooz;
-                                output[xp][yp] = illumination[L_index];
-                            }
-                        }
-                    }
-                }
-            }
-            return output;
-        }
+                  if (L > 0) {
+                      const L_index = Math.round(L * 8);
+                      if (L_index >= 0 && L_index < illumination.length) {
+                          if (ooz > zbuffer[xp][yp]) {
+                              zbuffer[xp][yp] = ooz;
+                              output[xp][yp] = illumination[L_index];
+                          }
+                      }
+                  }
+              }
+          }
+          return output;
+      }
 
-        function render() {
-            A += theta_spacing;
-            B += phi_spacing;
-            const frame = render_frame(A, B);
-            let outputStr = "";
-            for (let row of frame) {
-                outputStr += row.join('') + "\n";
-            }
-            document.getElementById("donut").innerText = outputStr;
-        }
+      function render() {
+          A += theta_spacing;
+          B += phi_spacing;
+          const frame = render_frame(A, B);
+          let outputStr = "";
+          for (let row of frame) {
+              outputStr += row.join('') + "\n";
+          }
+          document.getElementById("donut").innerText = outputStr;
+      }
 
-        setInterval(render, 30);
+      setInterval(render, 30);
     </script>
-</body>
+  </body>
 </html>
