@@ -1,0 +1,31 @@
+body {
+	font-size: 14px;
+	line-height: 1em;
+	font-family: sans-serif;
+    background-color: black;
+}
+form {
+	position: absolute;
+	top: .5em;
+	left: .5em;
+	width: 16em;
+	padding: .25em .5em;
+	border-radius: .25em;
+	background-color: rgba(255, 255, 255, 0.5);
+	color: #000;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	grid-gap: 0.25ch 1ch;
+    z-index: 1;
+}
+canvas {
+	position: absolute;
+	z-index: -2;
+	top: 0;
+	left: 0;
+	width: 100vw; /* Make it span the full viewport width */
+	height: 100vh; /* Make it span the full viewport height */
+	pointer-events: none; /* Prevent canvas from blocking interactions */
+	background: transparent;
+  }  
