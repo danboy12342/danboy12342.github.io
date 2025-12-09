@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameCube Menu - Text Update</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@500;700&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Saira Semi Condensed', sans-serif; /* Similar to GC font */
+            user-select: none;
+        }
+
+        /* --- UI OVERLAYS --- */
+        
+        /* 1. The Clock (Top Right) */
+        #gc-clock {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            text-align: center;
+            color: #ccc;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        #clock-date { font-size: 1.2rem; color: #aaddff; border-bottom: 1px solid #555; margin-bottom: 2px; }
+        #clock-time { font-size: 1.5rem; letter-spacing: 2px; font-weight: bold; text-shadow: 0 0 5px #aaddff; }
+
+        /* 2. Bottom Help Text */
+        #ui-layer {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #menu-title {
+            font-size: 2rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+            transition: opacity 0.3s;
+        }
+
+        #menu-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.5), transparent);
+            padding: 5px 0;
+        }
+
+        /* Scanlines & Start Screen */
+        #scanlines {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        #start-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            z-index: 20;
+            cursor: pointer;
+            transition: opacity 0.5s;
+        }
+        #start-overlay h1 { font-size: 3rem; margin: 0; text-shadow: 0 0 15px #6600ff; }
+        #start-overlay p { margin-top: 10px; opacity: 0.7; }
+
+    </style>
+</head>
+<body>
+
+    <!-- START SCREEN -->
+    <div id="start-overlay">
+        <h1>GAME CUBE</h1>
+        <p>Click anywhere to start</p>
+    </div>
+
+    <!-- SCANLINES -->
+    <div id="scanlines"></div>
+
+    <!-- CLOCK -->
+    <div id="gc-clock">
+        <div id="clock-date">--/--/--</div>
+        <div id="clock-time">--:--</div>
+    </div>
+
+    <!-- BOTTOM UI -->
+    <div id="ui-layer">
+        <div id="menu-title">Game Play</div>
+        <div id="menu-desc">Start the game in the disc slot</div>
+    </div>
+
+    <!-- 3D LIBRARIES -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+        // --- 1. CONFIG & DATA ---
+        const menuItems = [
+            { 
+                name: "Game Play", 
+                desc: "Start the game in the disc slot",
+                pos: [0, 0, 1.26], 
+                rot: [0, 0, 0] 
+            },
+            { 
+                name: "Calendar", 
+                desc: "Adjust date and time settings",
+                pos: [1.26, 0, 0], 
+                rot: [0, Math.PI/2, 0] 
+            },
+            { 
+                name: "Memory Card", 
+                desc: "Manage data on Memory Cards",
+                pos: [0, 0, -1.26], 
+                rot: [0, Math.PI, 0] 
+            },
+            { 
+                name: "Options", 
+                desc: "Change sound and screen settings",
+                pos: [-1.26, 0, 0], 
+                rot: [0, -Math.PI/2, 0] 
+            },
+        ];
+
+        let currentFaceIndex = 0;
+        let isAnimating = false;
+
+        // --- 2. CLOCK LOGIC ---
+        function updateClock() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            
+            document.getElementById('clock-date').innerText = dateStr;
+            document.getElementById('clock-time').innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- 3. SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a0a0a, 0.03);
+
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 14);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        document.body.appendChild(renderer.domElement);
+
+        // --- 4. LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // A moving point light to create reflections on the glass
+        const movingLight = new THREE.PointLight(0x88ccff, 4, 20);
+        movingLight.position.set(3, 3, 5);
+        scene.add(movingLight);
+
+        const backLight = new THREE.PointLight(0xaa00ff, 2, 20);
+        backLight.position.set(-5, -2, -5);
+        scene.add(backLight);
+
+        // --- 5. TEXTURE GENERATOR ---
+        // Creates a crisp canvas texture for each cube face
+        function createMenuTexture(text) {
+            const size = 1024; // High resolution
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // 1. Transparent Background
+            ctx.clearRect(0, 0, size, size);
+
+            // 2. Draw the rounded border
+            const margin = 100;
+            const w = size - (margin*2);
+            const h = size - (margin*2);
+            
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+            ctx.lineWidth = 15;
+            ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+            ctx.shadowBlur = 30;
+            
+            ctx.beginPath();
+            ctx.roundRect(margin, margin, w, h, 80); // RoundRect is modern canvas API
+            ctx.stroke();
+
+            // 3. Draw the Text
+            ctx.fillStyle = "white";
+            ctx.font = "bold 140px 'Arial Narrow', sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.shadowBlur = 40; // intense glow
+            ctx.shadowColor = "rgba(100, 200, 255, 0.9)";
+            
+            // Break text into words if needed, but for these titles single line is usually fine
+            // We shift y slightly up because of the baseline
+            ctx.fillText(text.toUpperCase(), size/2, size/2);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            return texture;
+        }
+
+        // --- 6. OBJECTS ---
+        
+        // Group that rotates
+        const menuGroup = new THREE.Group();
+        scene.add(menuGroup);
+
+        // A. The Inner Core (Dark opaque box)
+        const coreGeo = new THREE.BoxGeometry(2.4, 2.4, 2.4);
+        const coreMat = new THREE.MeshStandardMaterial({ 
+            color: 0x151515, 
+            roughness: 0.3,
+            metalness: 0.8 
+        });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        menuGroup.add(core);
+
+        // B. The Glass Shell
+        const glassGeo = new RoundedBoxGeometry(4, 4, 4, 4, 0.2);
+        const glassMat = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 0.1,
+            roughness: 0.05,
+            transmission: 0.95, 
+            thickness: 1.5,
+            transparent: true,
+            opacity: 0.4,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1
+        });
+        const glassCube = new THREE.Mesh(glassGeo, glassMat);
+        menuGroup.add(glassCube);
+
+        // C. The Text Faces
+        // We create planes slightly outside the core so they sit "inside" the glass
+        menuItems.forEach(item => {
+            const tex = createMenuTexture(item.name);
+            const planeMat = new THREE.MeshBasicMaterial({ 
+                map: tex, 
+                transparent: true,
+                opacity: 0.9,
+                side: THREE.DoubleSide,
+                blending: THREE.AdditiveBlending // Makes it look like light
+            });
+            const plane = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 3.8), planeMat);
+            
+            plane.position.set(...item.pos);
+            plane.rotation.set(...item.rot);
+            core.add(plane);
+        });
+
+        // D. Background Ambient Orb
+        const orbGeo = new THREE.IcosahedronGeometry(0.8, 2);
+        const orbMat = new THREE.MeshBasicMaterial({ color: 0xaa88ff, wireframe: true });
+        const orb = new THREE.Mesh(orbGeo, orbMat);
+        scene.add(orb);
+
+        // --- 7. ANIMATION FUNCTIONS ---
+
+        function updateUIText() {
+            const titleEl = document.getElementById('menu-title');
+            const descEl = document.getElementById('menu-desc');
+            
+            // Fade out
+            titleEl.style.opacity = 0;
+            descEl.style.opacity = 0;
+
+            setTimeout(() => {
+                titleEl.innerText = menuItems[currentFaceIndex].name;
+                descEl.innerText = menuItems[currentFaceIndex].desc;
+                // Fade in
+                titleEl.style.opacity = 1;
+                descEl.style.opacity = 1;
+            }, 200);
+        }
+
+        function rotateMenu(dir) {
+            if(isAnimating) return;
+            isAnimating = true;
+            playAudio();
+
+            if(dir === 'right') {
+                currentFaceIndex = (currentFaceIndex + 1) % 4;
+            } else {
+                currentFaceIndex = (currentFaceIndex - 1 + 4) % 4;
+            }
+
+            // GameCube menu rotates counter to the arrow key direction usually
+            const targetY = -(currentFaceIndex * (Math.PI / 2));
+
+            updateUIText();
+
+            gsap.to(menuGroup.rotation, {
+                y: targetY,
+                duration: 0.7,
+                ease: "back.out(1.5)", // The signature bounce
+                onComplete: () => isAnimating = false
+            });
+        }
+
+        // --- 8. AUDIO ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playAudio() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            // Synth sound: High pitch blip
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.2);
+            
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        }
+
+        // --- 9. INPUTS ---
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') rotateMenu('right');
+            if (e.key === 'ArrowLeft') rotateMenu('left');
+            if (e.key === 'Enter') {
+                // Select animation
+                gsap.to(camera.position, { z: 8, duration: 0.2, yoyo: true, repeat: 1 });
+                playAudio();
+            }
+        });
+
+        document.getElementById('start-overlay').addEventListener('click', function() {
+            this.style.opacity = 0;
+            setTimeout(() => this.remove(), 500);
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+        });
+
+        // --- 10. LOOP ---
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            // Floating glass effect (gentle sway)
+            glassCube.rotation.z = Math.sin(t * 0.5) * 0.05;
+            glassCube.rotation.x = Math.cos(t * 0.3) * 0.05;
+
+            // Background Orb Movement
+            orb.position.x = Math.sin(t * 0.8) * 10;
+            orb.position.y = Math.cos(t * 0.5) * 6;
+            orb.position.z = Math.sin(t * 0.2) * 10 - 15;
+            orb.rotation.y += 0.01;
+            orb.rotation.x += 0.01;
+
+            // Move the light around the cube to show off the glass reflections
+            movingLight.position.x = Math.sin(t) * 8;
+            movingLight.position.z = Math.cos(t) * 8;
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
