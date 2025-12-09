@@ -4,5 +4,307 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="favicon.ico" />
+    <title>dwsm</title>
+    <style>
+      body {
+          background-color: black;
+          color: lime;
+          font-family: monospace;
+          margin: 0;
+          padding: 20px;
+          overflow: hidden;
+      }
+
+      #terminal {
+          white-space: pre-wrap;
+          word-wrap: break-word;
+      }
+
+      #output {
+          margin-bottom: 10px;
+      }
+
+      #input-line {
+          display: flex;
+      }
+
+      #prompt {
+          margin-right: 5px;
+      }
+
+      #command-input {
+          background: none;
+          border: none;
+          color: lime;
+          outline: none;
+          flex-grow: 1;
+      }
+
+      /* Themes */
+      .theme-green {
+          background-color: black;
+          color: lime;
+      }
+
+      .theme-white {
+          background-color: black;
+          color: white;
+      }
+
+      .theme-blue {
+          background-color: black;
+          color: blue;
+      }
+
+      /* Network load bar */
+      .load-bar {
+          display: inline-block;
+          color: lime;
+      }
+      .load-bar.filled {
+          color: red;
+      }
+    </style>
   </head>
+  <body class="theme-green">
+    <div id="terminal">
+      <div id="output">
+        <div>Connected to port 230</div>
+        <div id="datetime"></div>
+        <div id="network-load"></div>
+        <div>
+          This port using 0.0% of resource<br />
+          There are 103 known locals. There are 26648 hosts on the network.
+        </div>
+        <div>Type `login` to begin.</div>
+      </div>
+      <div id="input-line">
+        <span id="prompt">unknown@dwsmpetronas:~$</span>
+        <input type="text" id="command-input" autofocus />
+      </div>
+    </div>
+
+    <script>
+      const output = document.getElementById('output');
+      const commandInput = document.getElementById('command-input');
+      const datetimeElement = document.getElementById('datetime');
+      const networkLoadElement = document.getElementById('network-load');
+      const body = document.body;
+      let isLoggedIn = false;
+      let isLocked = false;
+      let startTime = Date.now(); // Track time spent on the site
+
+      // Predefined files (you can add more)
+      const files = {
+          gbackupcodes: "SAVE YOUR BACKUP CODES Keep these backup codes somewhere safe but accessible. 1. ALREADY USED		 6. ALREADY USED 2. ALREADY USED		 7. 4366 0851    3. 4217 2945		 8. 8367 1349   4. 2556 5578		 9. ALREADY USED  5. ALREADY USED		10. 9274 1625  (danboy12342@gmail.com) * You can only use each backup code once. * Need more? Visit https://g.co/2sv * These codes were generated on: Apr 1, 2023.",
+          otherstuff: "Application Submitted  Your OHS refrance number is  35384270 ----------------------------------------- Your application has been received and is being processe Your reference number is AK36NJS5P 18813-354539 (council) ------------------- Your National Insurance Number is PL641182C ------------------- Provisional Licence   ------------------   moonball  C:\Users\44787\Desktop\F;\Moon Golf\MoonGolf.exe   -------------------   Starwars   /active telnet-   towel.blinkenlights.nl   /run/   -------------------  Wether  /open rainmaker.wunderground.com/ (err as of 11-23-21)  ------------------- chess /open freechess.org ------------------- open india.colorado.edu:13  times  ------------------Hexadecimal --> b64 --> polybius square: (try to decode!)  4E 44 45 67 4D 54 4D 67 4E 44 51 67 4E 44 51 67 4D 6A 51 67 4D 54 55 67 4E 44 45 67 4D 6A 4D 67 4D 7A 49 67 4D 6A 4D 67 4D 7A 49 67 4D 7A 45 67 4E 54 49 67 4D 6A 51 67 4D 7A 4D 67 4D 54 4D 67 4E 54 59 67 4D 7A 45 67 4D 7A 4D 67 4D 54 4D 67 4D 6A 49 67 4D 7A 49 67 4D 6A 4D 67 4E 54 55 67 4D 7A 55 67 4D 7A 45 67 4D 6A 55 67 4D 6A 51 67 4E 44 51 67 4D 6A 45 67 4E 54 51 67 4D 6A 4D 67 4D 6A 49 67 4D 7A 49 67 4D 7A 49 67 4D 54 45 67 4D 6A 49 67 4D 7A 45 67 4D 54 51 67 4D 54 4D 67 4D 54 4D 67 4E 54 55 67 4E 54 49 67 4D 6A 51 67 4D 7A 4D 67 4D 54 4D 67 4D 54 51 3D",
+          file3: "STARLING password:6335640113443201SET. JULY 2023 App pass 2006"
+      };
+
+      // Generate a random network load percentage and bar
+      function generateNetworkLoad() {
+          const loadPercent = Math.floor(Math.random() * (92 - 75 + 1)) + 75; // Random between 75% and 92%
+          const filledBlocks = Math.round(loadPercent / 20); // 5 blocks total (each block represents 20%)
+          const bar = '['
+              + '#'.repeat(filledBlocks).split('').map(() => `<span class="load-bar filled">#</span>`).join('')
+              + '-'.repeat(5 - filledBlocks).split('').map(() => `<span class="load-bar">-</span>`).join('')
+              + ']';
+          networkLoadElement.innerHTML = `Total network load is ${loadPercent}% ${bar}`;
+      }
+
+      // Display current date and time in Pacific Standard Time (PST)
+      function updateDateTime() {
+          const now = new Date();
+          const pstTime = now.toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              hour12: true,
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+          });
+          datetimeElement.textContent = `It is ${pstTime} in Old Adobe Rd, Palo Alto, California, USA.`;
+      }
+
+      // Update date and time every 5 second
+      updateDateTime();
+      setInterval(updateDateTime, 5000);
+        // Generate network load on page load
+        generateNetworkLoad();
+
+        // Generate a random 8-digit number
+        function generateRandomId() {
+            return Math.floor(10000000 + Math.random() * 90000000).toString();
+        }
+
+        // Generate a random percentage between 20 and 90
+        function generateRandomPercentage() {
+            return Math.floor(Math.random() * (90 - 20 + 1)) + 20;
+        }
+
+        // Generate a color based on percentage
+        function getBarColor(percentage) {
+            if (percentage < 40) return 'lime';
+            if (percentage < 70) return 'yellow';
+            return 'red';
+        }
+
+        // Display htop-style menu
+        function showHtop() {
+            const htopOutput = document.createElement('div');
+            htopOutput.innerHTML = ' ';
+
+            for (let i = 0; i < 24; i++) {
+                const label = generateRandomId();
+                const percentage = generateRandomPercentage();
+                const color = getBarColor(percentage);
+
+                const bar = `
+                    <div class="htop-bar">
+                        <div class="htop-bar-label">${label}</div>
+                        <div class="htop-bar-progress">
+                            <div class="htop-bar-progress-filled" style="width: ${percentage}%; background-color: ${color};"></div>
+                        </div>
+                        <div>${percentage}%</div>
+                    </div>
+                `;
+                htopOutput.innerHTML += bar;
+            }
+
+            output.appendChild(htopOutput);
+            output.scrollTop = output.scrollHeight; // Auto-scroll
+        }
+
+        // Handle user input
+        commandInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = commandInput.value.trim();
+                commandInput.value = '';
+                handleCommand(command);
+            }
+        });
+
+        // Handle commands
+        function handleCommand(command) {
+            if (isLocked) {
+                appendOutput("Terminal is locked.");
+                return;
+            }
+
+            const args = command.split(' ');
+            const cmd = args[0];
+
+            switch (cmd) {
+                case 'login':
+                    if (!isLoggedIn) {
+                        appendOutput("Username: dwsm");
+                        appendOutput("Password: 1234567", true);
+                        if (args[1] === 'dwsm' && args[2] === '1234567') {
+                            isLoggedIn = true;
+                            promptElement.textContent = "dmeverestremoteuser@dwsmpetronas$";
+                            appendOutput("You Have Mail");
+                            appendOutput("Type `help` for a list of commands.");
+                        } else {
+                            appendOutput("Login failed. use title");
+                        }
+                    } else {
+                        appendOutput("You are already logged in.");
+                    }
+                    break;
+                case 'view':
+                    if (!isLoggedIn) {
+                        appendOutput("Error: You must be logged in to view files.");
+                        break;
+                    }
+                    if (args.length === 2 && files[args[1]]) {
+                        appendOutput(files[args[1]]);
+                    } else {
+                        appendOutput(`Error: File not found - ${args[1]}`);
+                    }
+                    break;
+                case 'ls':
+                    if (!isLoggedIn) {
+                        appendOutput("Error: You must be logged in to list files.");
+                        break;
+                    }
+                    appendOutput("Available files:");
+                    appendOutput(Object.keys(files).join(", "));
+                    break;
+                case 'cls':
+                    output.innerHTML = ''; // Clear the screen
+                    break;
+                case 'lock':
+                    isLocked = true;
+                    appendOutput("Terminal locked. Type 'unlock' to unlock.");
+                    break;
+                case 'unlock':
+                    if (args.length === 2 && args[1] === '1234567') {
+                        isLocked = false;
+                        appendOutput("Terminal unlocked.");
+                    } else {
+                        appendOutput("Error: Incorrect unlock password.");
+                    }
+                    break;
+                case 'theme':
+                    if (args.length === 2) {
+                        switch (args[1]) {
+                            case 'green':
+                                body.className = 'theme-green';
+                                break;
+                            case 'white':
+                                body.className = 'theme-white';
+                                break;
+                            case 'blue':
+                                body.className = 'theme-blue';
+                                break;
+                            default:
+                                appendOutput("Invalid theme. Available themes: green, white, blue.");
+                        }
+                    } else {
+                        appendOutput("Usage: theme <green|white|blue>");
+                    }
+                    break;
+                case 'neofetch':
+                    const timeSpent = Math.floor((Date.now() - startTime) / 1000); // Time in seconds
+                    appendOutput(`Time on site: ${timeSpent} seconds`);
+                    appendOutput(`Browser: ${navigator.userAgent}`);
+                    updateDateTime(); // Show current date and time in PST
+                    break;
+                case 'htop':
+                    showHtop();
+                    break;
+                case 'help':
+                    if (isLoggedIn) {
+                        appendOutput("Available commands:");
+                        appendOutput("  login - Log in to the system");
+                        appendOutput("  view <filename> - View a text file");
+                        appendOutput("  ls - List available files");
+                        appendOutput("  cls - Clear the screen");
+                        appendOutput("  lock - Lock the terminal");
+                        appendOutput("  unlock <password> - Unlock the terminal");
+                        appendOutput("  theme <green|white|blue> - Change terminal theme");
+                        appendOutput("  neofetch");
+                        appendOutput("  htop");
+                        appendOutput("  help");
+                    } else {
+                        appendOutput("Type `login` to begin.");
+                    }
+                    break;
+                default:
+                    appendOutput(`Command not found: ${cmd}`);
+            }
+        }
+
+        // Append text to the terminal output
+        function appendOutput(text, isPassword = false) {
+            const line = document.createElement('div');
+            line.textContent = isPassword ? '*'.repeat(text.length) : text;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight; // Auto-scroll
+        }
+    </script>
+  </body>
 </html>

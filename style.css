@@ -460,13 +460,13 @@ body.menu-toggled > #menu > #menu-links > .link:nth-of-type(4) {
 /* -- YouTube Link Styles -- */
 
 body.menu-toggled > .meta-link {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 body.menu-toggled > .meta-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.75);
 }
 
 body.menu-toggled > .meta-link > span {

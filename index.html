@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="favicon.ico" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👽</text></svg>"
+      type="image/svg+xml"
+    />
 
     <title>Strange Stuff</title>
 
@@ -29,324 +34,395 @@
       referrerpolicy="no-referrer"
     />
     <style>
-              :root {
-                --red-rgb: 248 113 113;
-                --blue-rgb: 56 189 248;
-                --green-rgb: 74 222 128;
-                --yellow-rgb: 253 224 71;
+      :root {
+        --red-rgb: 248 113 113;
+        --blue-rgb: 56 189 248;
+        --green-rgb: 74 222 128;
+        --yellow-rgb: 253 224 71;
 
-                --background-rgb: 0 0 0;
-                --color-1: #87CEEB; /* Light Sky Blue */
-                --color-2: #00b5ff; /* Dodger Blue */
-                --color-3: #EB459E; /*  Pale Violet Red */
-                --color-4: #5865F2; /*  Indigo */
-                --color-5: #F08080; /*  Light Coral */
-                --color-6: #FFC0CB; /*  Pink */
-                --color-7: #FFA07A; /*  Light Salmon */
-                --purple: #800080; /* Purple */
-              }
+        --background-rgb: 0 0 0;
+        --color-1: #87CEEB; /* Light Sky Blue */
+        --color-2: #00b5ff; /* Dodger Blue */
+        --color-3: #EB459E; /*  Pale Violet Red */
+        --color-4: #5865F2; /*  Indigo */
+        --color-5: #F08080; /*  Light Coral */
+        --color-6: #FFC0CB; /*  Pink */
+        --color-7: #FFA07A; /*  Light Salmon */
+        --purple: #800080; /* Purple */
+      }
 
-            .ubuntu-regular {
-              font-family: "Ubuntu", sans-serif;
-              font-weight: 400;
-              font-style: normal;
-            }
+      .ubuntu-regular {
+        font-family: "Ubuntu", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
 
-              body {
-                height: 100vh;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgb(var(--background-rgb));
-                overflow: hidden;
-                perspective: 2000px;
-                font-family: "Ubuntu", sans-serif;
-                font-size: 16px; /* Changed font size to 16px */
-                font-weight: 500;
-              }
+      body {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(var(--background-rgb));
+        overflow: hidden;
+        perspective: 2000px;
+        font-family: "Ubuntu", sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0;
+      }
 
-              * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-              }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-              #container {
-                width: 140rem;
-                aspect-ratio: 1;
-                display: grid;
-                grid-template-rows: repeat(40, 1fr);
-                grid-template-columns: repeat(40, 1fr);
-                position: absolute;
-                transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(1.25);
-              }
+      #container {
+        width: 140rem;
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-rows: repeat(40, 1fr);
+        grid-template-columns: repeat(40, 1fr);
+        position: absolute;
+        transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(1.25);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+      }
 
-              #container:after,
-              #container:before {
-                content: "";
-                position: absolute;
-                inset: 0px;
-                pointer-events: none;
-              }
+      #container.loaded {
+        opacity: 1;
+      }
 
-              #container:before {
-                z-index: 2;
-                background-image: url("https://assets.codepen.io/1468070/plus-pattern-center.png");
-                background-size: 5%;
-                background-repeat: repeat;
-                opacity: 0.25;
-              }
+      #container:after,
+      #container:before {
+        content: "";
+        position: absolute;
+        inset: 0px;
+        pointer-events: none;
+      }
 
-              #container:after {
-                z-index: 3;
-                background: radial-gradient(circle, transparent 25%, rgb(var(--background-rgb)) 80%);
-              }
+      #container:before {
+        z-index: 2;
+        background-image: url("https://assets.codepen.io/1468070/plus-pattern-center.png");
+        background-size: 5%;
+        background-repeat: repeat;
+        opacity: 0.25;
+      }
 
-              .tile {
-                border: 1px solid rgb(255 255 255 / 25%);
-                transition: background-color 1500ms;
-              }
+      #container:after {
+        z-index: 3;
+        background: radial-gradient(circle, transparent 25%, rgb(var(--background-rgb)) 80%);
+      }
 
-              .tile:hover {
-                transition-duration: 0ms;
-              }
+      .tile {
+        border: 1px solid rgb(255 255 255 / 25%);
+        transition: background-color 1500ms, transform 300ms, opacity 300ms;
+        cursor: pointer;
+        outline: none;
+        opacity: 0.9;
+      }
 
-              .tile:nth-child(4n):hover {
-                background-color: var(--color-1); /* Light Sky Blue */
-              }
+      .tile:hover,
+      .tile:focus {
+        transition-duration: 0ms;
+        transform: scale(1.05);
+        z-index: 1;
+        opacity: 1;
+      }
 
-              .tile:nth-child(4n + 1):hover {
-                background-color: var(--color-2); /* Dodger Blue */
-              }
+      .tile:focus-visible {
+        outline: 2px solid var(--color-2);
+        outline-offset: 2px;
+      }
 
-              .tile:nth-child(4n + 2):hover {
-                background-color: var(--color-3); /* Pale Violet Red */
-              }
+      .tile:nth-child(4n):hover,
+      .tile:nth-child(4n):focus {
+        background-color: var(--color-1);
+      }
 
-              .tile:nth-child(4n + 3):hover {
-                background-color: var(--color-4); /* Indigo */
-              }
+      .tile:nth-child(4n + 1):hover,
+      .tile:nth-child(4n + 1):focus {
+        background-color: var(--color-2);
+      }
 
-              .tile:nth-child(7n):hover {
-                background-color: var(--color-2); /* Dodger Blue */
-              }
+      .tile:nth-child(4n + 2):hover,
+      .tile:nth-child(4n + 2):focus {
+        background-color: var(--color-3);
+      }
 
-              .tile:nth-child(7n + 3):hover {
-                background-color: var(--color-3); /* Pale Violet Red */
-              }
+      .tile:nth-child(4n + 3):hover,
+      .tile:nth-child(4n + 3):focus {
+        background-color: var(--color-4);
+      }
 
-              .tile:nth-child(7n + 5):hover {
-                background-color: var(--color-4); /* Indigo */
-              }
+      .tile:nth-child(7n):hover,
+      .tile:nth-child(7n):focus {
+        background-color: var(--color-2);
+      }
 
-              .tile:nth-child(7n + 6):hover {
-                background-color: var(--color-1); /* Light Sky Blue */
-              }
+      .tile:nth-child(7n + 3):hover,
+      .tile:nth-child(7n + 3):focus {
+        background-color: var(--color-3);
+      }
 
-              .tile:nth-child(11n + 1):hover {
-                background-color: var(--color-1); /* Light Sky Blue */
-              }
+      .tile:nth-child(7n + 5):hover,
+      .tile:nth-child(7n + 5):focus {
+        background-color: var(--color-4);
+      }
 
-              .tile:nth-child(11n + 4):hover {
-                background-color: var(--color-2); /* Dodger Blue */
-              }
+      .tile:nth-child(7n + 6):hover,
+      .tile:nth-child(7n + 6):focus {
+        background-color: var(--color-1);
+      }
 
-              .tile:nth-child(11n + 7):hover {
-                background-color: var(--color-3); /* Pale Violet Red */
-              }
+      .tile:nth-child(11n + 1):hover,
+      .tile:nth-child(11n + 1):focus {
+        background-color: var(--color-1);
+      }
 
-              .tile:nth-child(11n + 10):hover {
-                background-color: var(--color-4); /* Indigo */
-              }
+      .tile:nth-child(11n + 4):hover,
+      .tile:nth-child(11n + 4):focus {
+        background-color: var(--color-2);
+      }
 
-              /* Links */
-              #links {
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                display: flex;
-                gap: 10px;
-              }
+      .tile:nth-child(11n + 7):hover,
+      .tile:nth-child(11n + 7):focus {
+        background-color: var(--color-3);
+      }
 
-              .meta-link {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-              }
+      .tile:nth-child(11n + 10):hover,
+      .tile:nth-child(11n + 10):focus {
+        background-color: var(--color-4);
+      }
 
-              .label {
-                color: white;
-                font-size: 1.2rem;
-                font-weight: bold;
-              }
+      /* Links */
+      #links {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        display: flex;
+        gap: 10px;
+        z-index: 1000;
+      }
 
-              .dot {
-                color: white;
-              }
+      .meta-link {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-              .source, .youtube {
-                color: var(--purple); /* Purple */
-                text-decoration: none;
-                font-weight: normal; /* Normal font weight for links */
-              }
+      .label {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
 
-              .source i, .youtube i {
-                font-size: 1.5rem;
-                color: var(--purple); /* Purple */
-              }
+      .dot {
+        color: white;
+      }
 
-              /* Terminal Window */
-              #terminal-window {
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                background: #020202;
-                border-top: 20px solid #c4c4c4;
-                border-radius: .25rem;
-                box-shadow: 4px 1px 11px rgba(0, 0, 0, 0.22);
-                min-height: 425px;
-                max-width: 600px;
-                min-width: 350px;
-                padding: 0.5rem;
-                position: relative;
-                width: 100%;
-                z-index: 100; /* Make it appear on top */
-              }
+      .source, .youtube {
+        color: var(--purple);
+        text-decoration: none;
+        font-weight: normal;
+      }
 
-              #terminal-window::before {
-                background: #747474;
-                border-radius: 50%;
-                content: "";
-                display: block;
-                height: 10px;
-                position: absolute;
-                top: -15px;
-                left: 5px;
-                width: 10px;
-              }
+      .source i, .youtube i {
+        font-size: 1.5rem;
+        color: var(--purple);
+      }
 
-              #terminal-prompt {
-                font-weight: bold;
-                color: white;
-                font-size: 16px; /* Changed font size to 16px */
-              }
+      /* Terminal Window */
+      #terminal-window {
+        position: fixed;
+        /* Center on screen by default */
+        top: 50%;
+        left: 50%;
+        background: #020202;
+        border-top: 20px solid #c4c4c4;
+        border-radius: .25rem;
+        box-shadow: 4px 1px 11px rgba(0, 0, 0, 0.22);
+        min-height: 425px;
+        max-width: 600px;
+        min-width: 350px;
+        padding: 0.5rem;
+        width: 100%;
+        z-index: 100;
+        opacity: 0;
+        /* Initial state: Centered horizontally, slightly lower for entry animation */
+        transform: translate(-50%, -60%);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
 
-              .neofetch-output {
-                color: white;
-                font-weight: normal;
-                margin-top: 5px;
-                display: flex;
-                align-items: center; /* Align items vertically */
-              }
+      #terminal-window.loaded {
+        opacity: 1;
+        /* Final state: Perfectly centered */
+        transform: translate(-50%, -50%);
+      }
 
-              .neofetch-line {
-                display: flex;
-                align-items: center;
-                margin-bottom: 5px;
-              }
+      #terminal-window.dragging {
+        transition: none;
+        opacity: 0.95;
+      }
 
-              .neofetch-icon {
-                margin-right: 10px;
-                font-size: 1.2em;
-                color: #ff79c6;
-              }
+      #terminal-window::before {
+        background: #747474;
+        border-radius: 50%;
+        content: "";
+        display: block;
+        height: 10px;
+        position: absolute;
+        top: -15px;
+        left: 5px;
+        width: 10px;
+      }
 
-              .neofetch-label {
-                font-weight: bold;
-                font-size: 16px; /* Changed font size to 16px */
-              }
+      #terminal-prompt {
+        font-weight: bold;
+        color: white;
+        font-size: 16px;
+        text-shadow: 0 0 2px rgba(0,0,0,0.8);
+      }
 
-              .neofetch-value {
-                margin-left: auto;
-                font-size: 16px; /* Changed font size to 16px */
-              }
+      .neofetch-output {
+        color: white;
+        font-weight: normal;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+      }
 
-              /* Terminal Lines */
-              .terminal-lines {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-              }
+      .neofetch-line {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+      }
 
-              .terminal-line {
-                color: white;
-                margin-top: 0.15rem;
-                position: relative;
-                font-size: 16px; /* Changed font size to 16px */
-              }
+      .neofetch-icon {
+        margin-right: 10px;
+        font-size: 1.2em;
+        color: #ff79c6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-              .terminal-blinker {
-                animation: .8s blink infinite;
-                background: white;
-                display: inline-block;
-                height: calc(12px + 0.25vw);
-                margin-bottom: -1px;
-                padding-bottom: 3px;
-                width: 8px;
-              }
+      .neofetch-label {
+        font-weight: bold;
+        font-size: 16px;
+      }
 
-              @keyframes blink {
-                from {
-                  opacity: 0;
-                }
+      .neofetch-value {
+        margin-left: auto;
+        font-size: 16px;
+      }
 
-                to {
-                  opacity: 1;
-                }
-              }
+      /* Terminal Lines */
+      .terminal-lines {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
 
-              /* Neofetch Output */
-              .neofetch-output-container {
-                color: white;
-                display: flex;
-                font-size: calc(9px + 0.25vw);
-                padding: 0.5rem;
-                position: relative;
-              }
+      .terminal-line {
+        color: white;
+        margin-top: 0.15rem;
+        position: relative;
+        font-size: 16px;
+        text-shadow: 0 0 2px rgba(0,0,0,0.8);
+      }
 
-              .neofetch-output-container svg {
-                max-width: 200px;
-                padding: 0.5rem;
-                width: 100%;
-              }
+      .terminal-blinker {
+        animation: .8s blink infinite;
+        background: white;
+        display: inline-block;
+        height: calc(12px + 0.25vw);
+        margin-bottom: -1px;
+        padding-bottom: 3px;
+        width: 8px;
+      }
 
-              .neofetch-output-list {
-                list-style: none;
-                padding: 0;
-                margin: 0 0 0 0.5rem;
-              }
+      @keyframes blink {
+        from {
+          opacity: 0;
+        }
 
-              .neofetch-cyan {
-                color: cyan;
-                font-size: 16px; /* Changed font size to 16px */
-              }
+        to {
+          opacity: 1;
+        }
+      }
 
-              .neofetch-block {
-                background: ${props => props.color};
-                display: inline-block;
-                height: 20px; /* Changed height to 20px */
-                margin-top: 0.5rem;
-                width: 20px; /* Changed width to 20px */
-              }
+      /* Neofetch Output */
+      .neofetch-output-container {
+        color: white;
+        display: flex;
+        font-size: calc(9px + 0.25vw);
+        padding: 0.5rem;
+        position: relative;
+      }
 
-              .neofetch-block:first-of-type {
-                margin-left: 1rem;
-              }
+      .neofetch-output-container svg {
+        max-width: 200px;
+        padding: 0.5rem;
+        width: 100%;
+      }
 
-              .neofetch-icon{
-                margin-right: 10px;
-                font-size: 2em; /* Changed size to 2em */
-                color: #ff79c6;
-              }
+      .neofetch-output-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0 0.5rem;
+      }
 
-              .neofetch-icon img { /* Added img styles for image placeholder */
-                width: 132px; /* Adjust width as needed */
-                height: 122px; /* Adjust height as needed */
-                margin-right: 10px; /* Adjust margin as needed */
-              }
+      .neofetch-cyan {
+        color: #7dd3fc; /* Improved contrast color */
+        font-size: 16px;
+        text-shadow: 0 0 2px rgba(0,0,0,0.8);
+      }
 
-              .blinking-cursor {
+      .neofetch-block {
+        background: ${props => props.color};
+        display: inline-block;
+        height: 20px;
+        margin-top: 0.5rem;
+        width: 20px;
+        border-radius: 2px;
+      }
+
+      .neofetch-block:first-of-type {
+        margin-left: 1rem;
+      }
+
+      .neofetch-icon{
+        margin-right: 10px;
+        font-size: 2em;
+        color: #ff79c6;
+      }
+
+      .neofetch-icon img {
+        width: 132px;
+        height: 122px;
+        margin-right: 10px;
+        border-radius: 4px;
+      }
+
+      .neofetch-output-container a {
+        color: #7dd3fc;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s, color 0.2s;
+      }
+
+      .neofetch-output-container a:hover {
+        color: #bae6fd;
+        border-bottom: 1px solid #bae6fd;
+      }
+
+      .neofetch-output-container a i {
+        margin-right: 4px;
+      }
+
+      .blinking-cursor {
         font-weight: 100;
         font-size: 30px;
         color: white;
@@ -357,7 +433,7 @@
         animation: 1s blink step-end infinite;
       }
 
-      @keyframes "blink" {
+      @keyframes blink {
         from, to {
           color: transparent;
         }
@@ -366,52 +442,112 @@
         }
       }
 
-      @-moz-keyframes blink {
-        from, to {
-          color: transparent;
-        }
-        50% {
-          color: white;
+      /* Loading animation */
+      .loading {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 1.5rem;
+        z-index: 1000;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        #container {
+          transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(1);
         }
       }
 
-      @-webkit-keyframes "blink" {
-        from, to {
-          color: transparent;
+      @media (max-width: 768px) {
+        #terminal-window {
+          max-width: 90vw;
+          /* Reset to top-left for mobile so it doesn't get cut off */
+          top: 10px;
+          left: 10px;
+          transform: scale(0.9);
+          transform-origin: top left;
         }
-        50% {
-          color: white;
+
+        #terminal-window.loaded {
+            /* Override the centering transform for mobile */
+            transform: scale(0.9);
+        }
+
+        #container {
+          transform: rotateX(50deg) rotateY(-5deg) rotateZ(20deg) scale(0.8);
+        }
+
+        .neofetch-icon img {
+          width: 100px;
+          height: 92px;
+        }
+
+        .neofetch-output-container {
+          flex-direction: column;
+        }
+
+        .neofetch-icon {
+          margin-right: 0;
+          margin-bottom: 15px;
+          justify-content: flex-start;
         }
       }
 
-      @-ms-keyframes "blink" {
-        from, to {
-          color: transparent;
+      @media (max-width: 480px) {
+        #terminal-window {
+          min-width: 280px;
+          max-width: 95vw;
         }
-        50% {
-          color: white;
+
+        .neofetch-icon img {
+          width: 80px;
+          height: 74px;
+        }
+
+        .neofetch-output-list li {
+          font-size: 14px;
         }
       }
 
-      @-o-keyframes "blink" {
-        from, to {
-          color: transparent;
-        }
-        50% {
-          color: white;
-        }
+      /* Focus styles for accessibility */
+      *:focus {
+        outline: 2px solid var(--color-2);
+        outline-offset: 2px;
+      }
+
+      *:focus:not(:focus-visible) {
+        outline: none;
       }
     </style>
   </head>
   <body>
-    <div id="terminal-window">
-      <div id="terminal-prompt">user@host:~$</div>
+    <!-- Loading indicator -->
+    <div class="loading" id="loading">Loading...</div>
+
+    <!-- Terminal Window with ARIA labels -->
+    <div
+      id="terminal-window"
+      role="dialog"
+      aria-label="Terminal interface"
+      aria-describedby="terminal-desc"
+    >
+      <div id="terminal-prompt" aria-live="polite">user@host:~$</div>
+      <div id="terminal-desc" class="sr-only">
+        Interactive terminal interface displaying system information
+      </div>
       <ul class="terminal-lines">
         <li class="terminal-line">nominal sys</li>
         <li class="terminal-line">$ neofetch</li>
         <div class="neofetch-output-container">
           <span class="neofetch-icon">
-            <img src="intro_strangestuff.svg" alt="Neofetch Icon" />
+            <img
+              src="intro_strangestuff.svg"
+              alt="Strange Stuff Logo"
+              onerror="this.style.display='none'; this.parentElement.innerHTML='👽';"
+            />
           </span>
           <ul class="neofetch-output-list">
             <li>
@@ -436,7 +572,7 @@
             <li><span class="neofetch-cyan">Terminal</span>: alacritty</li>
             <li>
               <span class="neofetch-cyan"
-                ><i class="fa-brands fa-youtube"></i></span
+                ><i class="fa-brands fa-youtube" aria-hidden="true"></i></span
               >:
               <a href="https://www.youtube.com/@strangestuffYT"
                 >StrangeStuffYT</a
@@ -444,90 +580,307 @@
             </li>
             <li>
               <span class="neofetch-cyan"
-                ><i class="fa-solid fa-music"></i></span
+                ><i class="fa-solid fa-music" aria-hidden="true"></i></span
               >:
               <a href="midiraw/play.html">my music</a>
             </li>
             <li>
               <span class="neofetch-cyan">art</span>:
               <a href="https://www.behance.net/danboy12342mui"
-                ><i class="fa-brands fa-behance"></i>hance</a
+                ><i class="fa-brands fa-behance" aria-hidden="true"></i>hance</a
               >
+            </li>
+            <!-- New MC Stats link added here -->
+            <li>
+              <span class="neofetch-cyan">mc stats</span>:
+              <a href="https://neuro-hcmc.streamlit.app/"
+                ><i class="fa-solid fa-chart-line" aria-hidden="true"></i
+              ></a>
             </li>
             <li>
               <span class="neofetch-cyan">main page</span>:<a
                 href="old_index.html"
               >
-                <i class="fa-solid fa-window-maximize"></i
+                <i class="fa-solid fa-window-maximize" aria-hidden="true"></i
               ></a>
             </li>
             <li>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-1);"
+                aria-label="Color block 1"
               ></div>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-2);"
+                aria-label="Color block 2"
               ></div>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-3);"
+                aria-label="Color block 3"
               ></div>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-4);"
+                aria-label="Color block 4"
               ></div>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-5);"
+                aria-label="Color block 5"
               ></div>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-6);"
+                aria-label="Color block 6"
               ></div>
               <div
                 class="neofetch-block"
                 style="background-color: var(--color-7);"
+                aria-label="Color block 7"
               ></div>
             </li>
-
-            <!--not currently used <span class="blinking-cursor">|</span>-->
           </ul>
         </div>
       </ul>
     </div>
 
-    <div id="container">
-      <div class="tile"></div>
-    </div>
+    <!-- Grid Container -->
+    <div id="container" aria-label="Interactive grid of colorful tiles"></div>
 
-    <script>
-      const container = document.querySelector("#container"),
-      tile = document.querySelector(".tile");
-
-      for(let i = 0; i < 1599; i++) {
-        container.appendChild(tile.cloneNode());
-      }
-    </script>
+    <!-- Cat Link -->
     <a
       id="source-link"
       class="meta-link"
       href="filesystem.html"
       target="_blank"
+      aria-label="Filesystem link"
     >
-      <span><i class="fa-solid fa-cat"></i></span>
+      <span><i class="fa-solid fa-cat" aria-hidden="true"></i></span>
     </a>
+
     <script>
-        console.log("you have fooled yourself bitch boy - james")
-        const dummy = {
-        'name' : "big dummy",
-        'reason': "is a big dummy",
-        'flaw' : "console tables should not be used for debugging",
-        'sayafterme' : "i will not hardcode debuging tools into by PUBLIC js console ",};
-      console.table (dummy);
-      console.log('%cFUCK, YOU!', 'color: #bada55; background: #232323; font-size: 22px;');
-      console.log('%cWhy is six afraid of seven? Six hasnt been the same since he left Vietnam. He can seldom close his eyes without opening them again at fear of Charlies lurking in the jungle trees. Not that you could ever see the bastards, mind you. They were swift, and they knew their way around the jungle like nothing else. He remembers the looks on the boys faces as he walked into that village and... oh, Jesus. The memories seldom left him, either. Sometimes hed reminisce - even hear - Texs southern drawl. He remembers the smell of Brooklyns cigarettes like nothing else. He always kept a pack of Luckys with him. The boys are gone, now. He knows that; its just that he forgets, sometimes. And, every now and then, the way that seven looks at him with avid concern in his eyes... it makes him think. Sets him on edge. Makes him feel like hes back there... in the jungle.', 'color: #FFC0CB; background: #ff79c6; font-size: 8px;');
+      // Clean console for production
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        console.clear();
+        console.log('%c Welcome to Strange Stuff! 👽', 'color: #87CEEB; font-size: 16px; font-weight: bold;');
+        console.log('%c Check out my content at: https://www.youtube.com/@strangestuffYT', 'color: #00b5ff;');
+      } else {
+        // Development mode - keep minimal logging
+        console.log('Development mode active');
+      }
+
+      // Wait for DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadingEl = document.getElementById('loading');
+        const container = document.getElementById('container');
+        const terminalWindow = document.getElementById('terminal-window');
+
+        // Show loading indicator
+        loadingEl.style.display = 'block';
+
+        // Create grid tiles
+        for(let i = 0; i < 1600; i++) {
+          const tile = document.createElement('div');
+          tile.className = 'tile';
+          tile.setAttribute('tabindex', '0'); // Make focusable
+          tile.setAttribute('aria-label', `Grid tile ${i + 1}`);
+          tile.setAttribute('role', 'button');
+
+          // Add keyboard support
+          tile.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+
+          container.appendChild(tile);
+        }
+
+        // Simulate loading delay for better UX
+        setTimeout(() => {
+          // Hide loading indicator
+          loadingEl.style.display = 'none';
+
+          // Show elements with fade-in animation
+          container.classList.add('loaded');
+          terminalWindow.classList.add('loaded');
+        }, 800);
+
+        // Add keyboard navigation for Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            // Clear any focused tiles
+            const focusedTile = document.activeElement;
+            if (focusedTile && focusedTile.classList.contains('tile')) {
+              focusedTile.blur();
+            }
+          }
+
+          // Tab navigation trap prevention
+          if (e.key === 'Tab') {
+            const tiles = document.querySelectorAll('.tile');
+            const firstTile = tiles[0];
+            const lastTile = tiles[tiles.length - 1];
+
+            if (e.shiftKey && document.activeElement === firstTile) {
+              e.preventDefault();
+              lastTile.focus();
+            } else if (!e.shiftKey && document.activeElement === lastTile) {
+              e.preventDefault();
+              firstTile.focus();
+            }
+          }
+        });
+
+        // Add click sound effect (optional)
+        const tiles = document.querySelectorAll('.tile');
+        tiles.forEach(tile => {
+          tile.addEventListener('click', function() {
+            // You could add a sound effect here
+            // new Audio('click.mp3').play().catch(() => {});
+
+            // Visual feedback
+            this.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+              this.style.transform = 'scale(1.05)';
+            }, 150);
+          });
+        });
+
+        // Add window resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(() => {
+            // Reset tile transforms on resize
+            tiles.forEach(tile => {
+              tile.style.transform = '';
+            });
+          }, 250);
+        });
+
+        // Handle image loading errors
+        const neofetchImg = document.querySelector('.neofetch-icon img');
+        if (neofetchImg) {
+          neofetchImg.onerror = function() {
+            console.log('Image failed to load, using fallback');
+            this.style.display = 'none';
+            const parent = this.parentElement;
+            parent.innerHTML = '<span style="font-size: 80px;">👽</span>';
+            parent.style.display = 'flex';
+            parent.style.alignItems = 'center';
+            parent.style.justifyContent = 'center';
+            parent.style.width = '132px';
+            parent.style.height = '122px';
+          };
+        }
+
+        // Add focus trap for terminal window
+        const terminalFocusable = terminalWindow.querySelectorAll('a, button, [tabindex]');
+        const firstFocusable = terminalFocusable[0];
+        const lastFocusable = terminalFocusable[terminalFocusable.length - 1];
+
+        terminalWindow.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') {
+            if (e.shiftKey && document.activeElement === firstFocusable) {
+              e.preventDefault();
+              lastFocusable.focus();
+            } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        });
+
+        // ----------------------------------------------------
+        // TERMINAL DRAGGING LOGIC
+        // ----------------------------------------------------
+        let isDragging = false;
+        let dragStartX, dragStartY;
+        let initialTerminalLeft, initialTerminalTop;
+        const headerHeight = 25; // Height of the "active" header area (matches border)
+
+        // Mouse Down (Start Drag)
+        terminalWindow.addEventListener('mousedown', function(e) {
+          const rect = terminalWindow.getBoundingClientRect();
+
+          // Only allow dragging if clicking the top border area
+          if (e.clientY >= rect.top && e.clientY <= rect.top + headerHeight) {
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+
+            // IMPORTANT:
+            // The element is currently positioned using CSS "top: 50%; left: 50%" + "transform: translate(-50%, -50%)".
+            // To make dragging smooth, we must instantly switch to absolute pixel positioning.
+
+            // 1. Get current visual coordinates
+            initialTerminalLeft = rect.left;
+            initialTerminalTop = rect.top;
+
+            // 2. Set explicit pixel values to replace the % values
+            terminalWindow.style.left = initialTerminalLeft + 'px';
+            terminalWindow.style.top = initialTerminalTop + 'px';
+
+            // 3. Remove the CSS transform (centering) immediately, so our pixel math works
+            terminalWindow.style.transform = 'none';
+
+            // Add dragging class to remove transition delay and improve performance
+            terminalWindow.classList.add('dragging');
+
+            e.preventDefault(); // Prevent text selection
+          }
+        });
+
+        // Mouse Move (Dragging)
+        window.addEventListener('mousemove', function(e) {
+          // Logic to change cursor style when hovering over the header area
+          const rect = terminalWindow.getBoundingClientRect();
+          if (e.clientY >= rect.top && e.clientY <= rect.top + headerHeight &&
+              e.clientX >= rect.left && e.clientX <= rect.right) {
+            terminalWindow.style.cursor = 'move';
+          } else {
+            terminalWindow.style.cursor = 'default';
+          }
+
+          // Actual dragging logic
+          if (isDragging) {
+            const deltaX = e.clientX - dragStartX;
+            const deltaY = e.clientY - dragStartY;
+
+            terminalWindow.style.left = `${initialTerminalLeft + deltaX}px`;
+            terminalWindow.style.top = `${initialTerminalTop + deltaY}px`;
+          }
+        });
+
+        // Mouse Up (End Drag)
+        window.addEventListener('mouseup', function() {
+          if (isDragging) {
+            isDragging = false;
+            terminalWindow.classList.remove('dragging');
+          }
+        });
+      });
+
+      // Add screen reader only class for accessibility
+      const style = document.createElement('style');
+      style.textContent = `
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+      `;
+      document.head.appendChild(style);
     </script>
   </body>
 </html>
