@@ -1,7 +1,5 @@
 <div class="settings settings-main">
-  <div class="settings-header">
-
-  </div>
+  <div class="settings-header"></div>
 
   <div class="settings-content">
     <div class="settings-navcontainer">
@@ -9,7 +7,8 @@
         <div class="icon"></div>
         <span class="label">Info/Credits</span>
       </div>
-      <div class="settings-navbtn settings right viewchange" data-view="licenses-temp" data-transition="fade">
+      <!-- Note: viewchange class triggers the JS router -->
+      <div class="settings-navbtn settings right viewchange" onmouseover="hover()" onclick="select()" data-view="licenses-temp" data-transition="fade">
         <div class="icon"></div>
         <span class="label">Wii Settings</span>
       </div>
@@ -17,6 +16,6 @@
   </div>
 
   <div class="settings-footer">
-    <div class="back viewchange" data-view="menu" data-transition="fade"></div>
+    <div class="back viewchange" onmouseover="hover()" onclick="back()" data-view="menu" data-transition="fade"></div>
   </div>
 </div>

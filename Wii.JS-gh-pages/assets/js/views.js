@@ -1,23 +1,16 @@
-// manages loading and changing views
-// partly recycled from another project of mine
-// very wip
+// Variable for transition speed
+var transitionLength = 300;
+var currentView = "default";
+var previousView = "default";
 
-//variables
-transitionLength = 300;
-
-// functions
-
-function preloadImage(url) {
-  var img=new Image();
-  img.src=url;
-}
-
+// Helper: Change View
 function changeView(v, t) {
-  // transition in
   if (t != "none") {
     if (t == "fade") {
+      // Fade to black
       $( ".black" ).addClass( "animate" );
       $( ".black" ).css( {"top" : "0"} );
+      
       setTimeout(function(){
         loadViewContents(v, t);
       }, transitionLength);
@@ -27,13 +20,19 @@ function changeView(v, t) {
   }
 }
 
+// Helper: AJAX Load
 function loadViewContents(v, t) {
+  // Use jQuery .load() to inject HTML from the views folder
   $(".app").load("views/" + v + ".html", function() {
+    
+    // Wait for images in the new view to load before fading back in
     setTimeout(function(){
       $('.app').imagesLoaded( { background: '*' }, function() {
+        
+        // View specific logic
         if (v === "menu") {
-          // append date
-          $(document).find( ".date" ).html( "<span> " + date + "</span>" );
+          // Update Date
+          if(typeof updateDate === "function") updateDate(); 
         }
 
         if (v === "settings-main") {
@@ -46,52 +45,46 @@ function loadViewContents(v, t) {
 
         currentView = v;
 
-        // transition out
+        // Transition out (Fade back in)
         if (t != "none") {
           if (t == "fade") {
             $( ".black" ).removeClass( "animate" );
+            
             if (v === "menu") {
-              // play menu music
+              // Play menu music
               var music = document.getElementById("bg-music");
-            	music.play();
+              if(music) music.play().catch(e => console.log("Autoplay blocked"));
 
-              // play startup sound if it's the first time
+              // Play startup sound only once
               if (previousView === "default") {
-                var music = document.getElementById("startup");
-              	music.play();
+                var startup = document.getElementById("startup");
+                if(startup) startup.play().catch(e => console.log("Autoplay blocked"));
               }
             }
+            
             setTimeout(function(){
               $( ".black" ).css( {"top" : "100vh"} );
             }, transitionLength);
           }
         }
-
-        console.log("yeet");
       });
     }, 100);
   });
 }
 
-// run after document load
-
 $( document ).ready(function() {
-
   currentView = "default";
   previousView = "default";
   $(".black").show();
 
-  // view change on click
+  // Event Delegation for View Changes
   $("body").on("click", ".viewchange", function() {
-	   viewtoChange = $(this).data("view");
-     transition = $(this).data("transition");
-     previousView = currentView;
+       var viewtoChange = $(this).data("view");
+       var transition = $(this).data("transition");
+       previousView = currentView;
+       changeView(viewtoChange, transition);
+  });
 
-     changeView(viewtoChange, transition);
-	});
-
-
-  // startup
+  // Initial Load
   changeView("menu", "fade");
-
 });

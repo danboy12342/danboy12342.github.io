@@ -2,25 +2,31 @@
 <html>
   <head>
     <title>Wii.JS</title>
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="assets/css/universal.css">
     <link rel="stylesheet" href="assets/css/menu.css">
     <link rel="stylesheet" href="assets/css/settings.css">
     <link href="https://fonts.googleapis.com/css?family=Asap:500" rel="stylesheet">
 
+    <!-- Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="assets/js/imagesloaded.pkgd.min.js"></script>
+    
+    <!-- App Scripts -->
     <script src="assets/js/views.js"></script>
     <script src="assets/js/main.js"></script>
   </head>
 
   <body>
+    <!-- Views are loaded here -->
     <div class="app"></div>
+    
+    <!-- Transition Overlay -->
     <div class="black"></div>
 
+    <!-- Sound Effects -->
     <div class="sfx">
-      <!-- <iframe src="assets/audio/bgmusic.html" allow="autoplay" style="display:none" id="music"></iframe> -->
       <audio id="startup" src="assets/audio/startup.mp3" controls></audio>
       <audio id="bg-music" src="assets/audio/bg-music.mp3" loop controls></audio>
       <audio id="hover" src="assets/audio/button-hover.mp3"></audio>
