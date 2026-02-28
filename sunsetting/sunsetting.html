@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Sun Never Sets</title>
     
-    <!-- Include Leaflet CSS for the map -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
@@ -16,26 +16,88 @@
             position: absolute;
             bottom: 30px;
             left: 30px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 25px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             z-index: 1000;
         }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #7dd3fc;
+            background: #222;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #333;
+            color: #bae6fd;
+        }
         
         h1 { margin: 0 0 10px 0; font-size: 20px; color: #222; }
         p { margin: 0; font-size: 14px; color: #555; }
-        .legend span { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; }
-        .sun-legend { background: #ffcc00; border: 2px solid #ffaa00; }
+        .legend { margin-top: 15px; }
+        .legend p { margin-bottom: 5px; }
+        
+        /* Legend formatting */
+        .legend span { 
+            display: inline-block; 
+            width: 12px; 
+            height: 12px; 
+            border-radius: 50%; 
+            margin-right: 5px; 
+        }
+        .sun-legend { background: #ffcc00; border: 2px solid #ffaa00; box-shadow: 0 0 6px #ffcc00; }
         .night-legend { background: #444; border: 2px solid #222; }
+
+        /* CUSTOM LEAFLET MARKERS */
+        .base-icon-container {
+            background: transparent;
+            border: none;
+        }
+
+        .marker-night {
+            width: 12px;
+            height: 12px;
+            background: #444;
+            border: 2px solid #222;
+            border-radius: 50%;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .marker-day {
+            width: 14px;
+            height: 14px;
+            background: #ffcc00;
+            border: 2px solid #ffaa00;
+            border-radius: 50%;
+            box-sizing: border-box;
+            /* Attach the CSS pulse animation */
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        /* The glowing pulse effect */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 4px #ffaa00, inset 0 0 2px #ffaa00; }
+            100% { box-shadow: 0 0 16px #ffcc00, inset 0 0 6px #ffaa00; }
+        }
     </style>
 </head>
 <body>
 
     <div id="ui-box">
+        <a href="../index.html" class="back-btn">← Back to Terminal</a>
         <h1>The Sun Never Sets...</h1>
         <p>Real-time sunlight tracking across US global installations.</p>
-        <br>
+        
         <div class="legend">
             <p><span class="sun-legend"></span> In Daylight</p>
             <p><span class="night-legend"></span> In Darkness</p>
@@ -44,35 +106,26 @@
 
     <div id="map"></div>
 
-    <!-- Include Javascript Libraries -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
     <script src="https://unpkg.com/@joergdietrich/leaflet.terminator"></script>
 
     <script>
-        // 1. Initialize the Map
+        //init map
         var map = L.map('map', {
-            center: [25, 0], // Center of the map
+            center:[25, 0],
             zoom: 2,
             minZoom: 2,
-            worldCopyJump: true // Allows seamless scrolling across the Pacific
+            worldCopyJump: true
         });
 
-        // Add a clean, minimal map style (CartoDB Light)
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
         }).addTo(map);
 
-        // 2. Add the Day/Night Shadow Overlay
         var terminator = L.terminator().addTo(map);
-        
-        // Update the shadow every minute
-        setInterval(function() {
-            terminator.setTime();
-        }, 60000); 
 
-        // 3. Sample Dataset of Global US Bases
-        // (You can expand this list using the hundreds of bases shown in your image)
+        //base array
         var bases =[
             {name: "Kadena Air Base, Japan", lat: 26.3556, lng: 127.7675},
             {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
@@ -86,38 +139,77 @@
             {name: "Naval Station Rota, Spain", lat: 36.6433, lng: -6.3486},
             {name: "Pituffik Space Base, Greenland", lat: 76.5312, lng: -68.7032},
             {name: "Soto Cano Air Base, Honduras", lat: 14.3828, lng: -87.6225},
-            {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381}
+            {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381},
+            {name: "JB Elmendorf-Richardson, Alaska", lat: 61.25, lng: -149.80},
+            {name: "Al Udeid Air Base, Qatar", lat: 25.11, lng: 51.31},
+            {name: "NSA Bahrain", lat: 26.20, lng: 50.60},
+            {name: "Aviano Air Base, Italy", lat: 46.03, lng: 12.59},
+            {name: "Incirlik Air Base, Turkey", lat: 37.00, lng: 35.42},
+            {name: "Lajes Field, Azores", lat: 38.73, lng: -27.09},
+            {name: "Naval Station Guantanamo Bay, Cuba", lat: 19.90, lng: -75.14},
+            {name: "JB San Antonio, TX, USA", lat: 29.45, lng: -98.45},
+            {name: "Naval Base Coronado, CA, USA", lat: 32.67, lng: -117.16},
+            {name: "Kwajalein Atoll (USAKA), Marshall Islands", lat: 8.72, lng: 167.73},
+            {name: "Camp Arifjan, Kuwait", lat: 28.87, lng: 48.16}
         ];
 
-        // 4. Calculate sunlight and plot points
-        var now = new Date();
-
-        bases.forEach(function(base) {
-            // Get sun position for the base's coordinates right now
-            var sunPos = SunCalc.getPosition(now, base.lat, base.lng);
-            
-            // If altitude is greater than 0, the sun is above the horizon
-            var isDaylight = sunPos.altitude > 0;
-
-            // Set marker styling based on daylight status
-            var outlineColor = isDaylight ? '#ffaa00' : '#222222';
-            var fillColor = isDaylight ? '#ffcc00' : '#444444';
-
-            // Create a circle marker
-            var marker = L.circleMarker([base.lat, base.lng], {
-                radius: 6,
-                color: outlineColor,
-                fillColor: fillColor,
-                fillOpacity: 0.9,
-                weight: 2
-            }).addTo(map);
-
-            // Add a popup when clicked
-            marker.bindPopup(
-                `<strong>${base.name}</strong><br>` +
-                `Current Status: ${isDaylight ? '☀️ Daylight' : '🌙 Night'}`
-            );
+        // Pre-configure the custom DivIcons
+        var dayIcon = L.divIcon({
+            className: 'base-icon-container',
+            html: "<div class='marker-day'></div>",
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
         });
+
+        var nightIcon = L.divIcon({
+            className: 'base-icon-container',
+            html: "<div class='marker-night'></div>",
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
+
+        var markers =[]; // Array to store map markers for updating
+
+        //plot an update
+        function updateBases() {
+            var now = new Date();
+
+            bases.forEach(function(base, index) {
+                var sunPos = SunCalc.getPosition(now, base.lat, base.lng);
+                var isDaylight = sunPos.altitude > 0;
+                var popupContent = `<strong>${base.name}</strong><br>Current Status: ${isDaylight ? 'Day Time' : 'Night Time'}`;
+
+                // If the marker already exists on the map
+                if (markers[index]) {
+                    // Only swap the icon if the state has changed (stops flickering)
+                    if (markers[index].isDaylight !== isDaylight) {
+                        markers[index].setIcon(isDaylight ? dayIcon : nightIcon);
+                        markers[index].isDaylight = isDaylight; // Update tracked state
+                    }
+                    markers[index].setPopupContent(popupContent);
+                } 
+                // Create the marker for the very first time
+                else {
+                    var marker = L.marker([base.lat, base.lng], {
+                        icon: isDaylight ? dayIcon : nightIcon
+                    }).addTo(map);
+                    
+                    marker.isDaylight = isDaylight; // Store custom state on the marker
+                    marker.bindPopup(popupContent);
+                    markers[index] = marker;
+                }
+            });
+        }
+
+        // Draw bases immediately on load
+        updateBases();
+
+        // 4. Update loops
+        setInterval(function() {
+            terminator.setTime(); // Progress shadow overlay
+            updateBases();        // Check markers to see if any just hit sunrise/sunset
+        }, 60000); 
+
     </script>
 </body>
 </html>
