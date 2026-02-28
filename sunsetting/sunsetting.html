@@ -127,30 +127,71 @@
 
         //base array
         var bases =[
+            // --- Asia / Pacific ---
             {name: "Kadena Air Base, Japan", lat: 26.3556, lng: 127.7675},
-            {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
-            {name: "Pearl Harbor, Hawaii", lat: 21.3445, lng: -157.9745},
-            {name: "Fort Liberty, NC, USA", lat: 35.1390, lng: -79.0060},
-            {name: "Diego Garcia, BIOT", lat: -7.3133, lng: 72.4111},
-            {name: "Andersen AFB, Guam", lat: 13.5841, lng: 144.9244},
+            {name: "Misawa Air Base, Japan", lat: 40.7042, lng: 141.3688},
             {name: "Camp Humphreys, South Korea", lat: 36.9606, lng: 127.0286},
-            {name: "RAF Lakenheath, UK", lat: 52.4138, lng: 0.5562},
+            {name: "Osan Air Base, South Korea", lat: 37.0855, lng: 127.0312},
+            {name: "Andersen AFB, Guam", lat: 13.5841, lng: 144.9244},
+            {name: "Wake Island Airfield", lat: 19.2804, lng: 166.6476},
+            {name: "Kwajalein Atoll (USAKA), Marshall Islands", lat: 8.7200, lng: 167.7300},
+            {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381},
+            {name: "Pearl Harbor, Hawaii", lat: 21.3445, lng: -157.9745},
+            {name: "Diego Garcia, BIOT", lat: -7.3133, lng: 72.4111},
+
+            // --- Middle East / Africa ---
+            {name: "Al Udeid Air Base, Qatar", lat: 25.1166, lng: 51.3149},
+            {name: "Camp Arifjan, Kuwait", lat: 28.8784, lng: 48.1633},
+            {name: "NSA Bahrain", lat: 26.2064, lng: 50.6068},
+            {name: "Prince Sultan Air Base, Saudi Arabia", lat: 24.0560, lng: 47.5564},
             {name: "Camp Lemonnier, Djibouti", lat: 11.5456, lng: 43.1481},
+
+            // --- Europe / Atlantic ---
+            {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
+            {name: "RAF Lakenheath, UK", lat: 52.4138, lng: 0.5562},
             {name: "Naval Station Rota, Spain", lat: 36.6433, lng: -6.3486},
+            {name: "Aviano Air Base, Italy", lat: 46.0305, lng: 12.5956},
+            {name: "NAS Sigonella, Italy", lat: 37.4022, lng: 14.9216},
+            {name: "Incirlik Air Base, Turkey", lat: 37.0019, lng: 35.4258},
+            {name: "Camp Bondsteel, Kosovo", lat: 42.3662, lng: 21.2464},
+            {name: "Lajes Field, Azores", lat: 38.7308, lng: -27.0906},
+            {name: "RAF Ascension Island", lat: -7.9696, lng: -14.3937},
+
+            // --- Americas / Greenland ---
             {name: "Pituffik Space Base, Greenland", lat: 76.5312, lng: -68.7032},
             {name: "Soto Cano Air Base, Honduras", lat: 14.3828, lng: -87.6225},
-            {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381},
-            {name: "JB Elmendorf-Richardson, Alaska", lat: 61.25, lng: -149.80},
-            {name: "Al Udeid Air Base, Qatar", lat: 25.11, lng: 51.31},
-            {name: "NSA Bahrain", lat: 26.20, lng: 50.60},
-            {name: "Aviano Air Base, Italy", lat: 46.03, lng: 12.59},
-            {name: "Incirlik Air Base, Turkey", lat: 37.00, lng: 35.42},
-            {name: "Lajes Field, Azores", lat: 38.73, lng: -27.09},
-            {name: "Naval Station Guantanamo Bay, Cuba", lat: 19.90, lng: -75.14},
-            {name: "JB San Antonio, TX, USA", lat: 29.45, lng: -98.45},
-            {name: "Naval Base Coronado, CA, USA", lat: 32.67, lng: -117.16},
-            {name: "Kwajalein Atoll (USAKA), Marshall Islands", lat: 8.72, lng: 167.73},
-            {name: "Camp Arifjan, Kuwait", lat: 28.87, lng: 48.16}
+            {name: "Naval Station Guantanamo Bay, Cuba", lat: 19.9056, lng: -75.1481},
+            
+            // --- Continental US & Alaska ---
+            {name: "JB Elmendorf-Richardson, Alaska", lat: 61.2500, lng: -149.8000},
+            {name: "Eielson AFB, Alaska", lat: 64.6655, lng: -147.1009},
+            
+            // West Coast & Rockies
+            {name: "Joint Base Lewis-McChord, WA, USA", lat: 47.1118, lng: -122.5367},
+            {name: "Naval Base Coronado, CA, USA", lat: 32.6780, lng: -117.1652},
+            {name: "Nellis AFB, NV, USA", lat: 36.2361, lng: -115.0343},
+            {name: "Cheyenne Mountain SFS, CO, USA", lat: 38.7441, lng: -104.8466},
+            {name: "Minot AFB, ND, USA", lat: 48.4158, lng: -101.3528},
+
+            // Midwest & Texas
+            {name: "Offutt AFB, NE, USA", lat: 41.1189, lng: -95.9124},
+            {name: "Whiteman AFB, MO, USA", lat: 38.7301, lng: -93.5476},
+            {name: "JB San Antonio, TX, USA", lat: 29.4500, lng: -98.4500},
+            {name: "Wright-Patterson AFB, OH, USA", lat: 39.8261, lng: -84.0484},
+
+            // South & East Coast
+            {name: "Fort Campbell, KY/TN, USA", lat: 36.6500, lng: -87.4583},
+            {name: "Fort Liberty, NC, USA", lat: 35.1390, lng: -79.0060},
+            {name: "Camp Lejeune, NC, USA", lat: 34.6953, lng: -77.3400},
+            {name: "Naval Station Norfolk, VA, USA", lat: 36.9388, lng: -76.3276},
+            {name: "NSB Kings Bay, GA, USA", lat: 30.7966, lng: -81.5434},
+            {name: "MacDill AFB, FL, USA", lat: 27.8488, lng: -82.5204},
+            {name: "NAS Pensacola, FL, USA", lat: 30.3533, lng: -87.3150},
+            
+            // Northeast
+            {name: "West Point (USMA), NY, USA", lat: 41.3918, lng: -73.9525},
+            {name: "NSB New London, CT, USA", lat: 41.3980, lng: -72.0864},
+            {name: "Hanscom AFB, MA, USA", lat: 42.4594, lng: -71.2825}
         ];
 
         // Pre-configure the custom DivIcons
