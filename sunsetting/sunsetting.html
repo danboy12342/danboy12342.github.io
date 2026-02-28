@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sun Never Sets</title>
+    
+    <!-- Include Leaflet CSS for the map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        #map { height: 100vh; width: 100vw; background: #a2c8db; }
+        
+        #ui-box {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        
+        h1 { margin: 0 0 10px 0; font-size: 20px; color: #222; }
+        p { margin: 0; font-size: 14px; color: #555; }
+        .legend span { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; }
+        .sun-legend { background: #ffcc00; border: 2px solid #ffaa00; }
+        .night-legend { background: #444; border: 2px solid #222; }
+    </style>
+</head>
+<body>
+
+    <div id="ui-box">
+        <h1>The Sun Never Sets...</h1>
+        <p>Real-time sunlight tracking across US global installations.</p>
+        <br>
+        <div class="legend">
+            <p><span class="sun-legend"></span> In Daylight</p>
+            <p><span class="night-legend"></span> In Darkness</p>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Include Javascript Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script src="https://unpkg.com/@joergdietrich/leaflet.terminator"></script>
+
+    <script>
+        // 1. Initialize the Map
+        var map = L.map('map', {
+            center: [25, 0], // Center of the map
+            zoom: 2,
+            minZoom: 2,
+            worldCopyJump: true // Allows seamless scrolling across the Pacific
+        });
+
+        // Add a clean, minimal map style (CartoDB Light)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+        }).addTo(map);
+
+        // 2. Add the Day/Night Shadow Overlay
+        var terminator = L.terminator().addTo(map);
+        
+        // Update the shadow every minute
+        setInterval(function() {
+            terminator.setTime();
+        }, 60000); 
+
+        // 3. Sample Dataset of Global US Bases
+        // (You can expand this list using the hundreds of bases shown in your image)
+        var bases =[
+            {name: "Kadena Air Base, Japan", lat: 26.3556, lng: 127.7675},
+            {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
+            {name: "Pearl Harbor, Hawaii", lat: 21.3445, lng: -157.9745},
+            {name: "Fort Liberty, NC, USA", lat: 35.1390, lng: -79.0060},
+            {name: "Diego Garcia, BIOT", lat: -7.3133, lng: 72.4111},
+            {name: "Andersen AFB, Guam", lat: 13.5841, lng: 144.9244},
+            {name: "Camp Humphreys, South Korea", lat: 36.9606, lng: 127.0286},
+            {name: "RAF Lakenheath, UK", lat: 52.4138, lng: 0.5562},
+            {name: "Camp Lemonnier, Djibouti", lat: 11.5456, lng: 43.1481},
+            {name: "Naval Station Rota, Spain", lat: 36.6433, lng: -6.3486},
+            {name: "Pituffik Space Base, Greenland", lat: 76.5312, lng: -68.7032},
+            {name: "Soto Cano Air Base, Honduras", lat: 14.3828, lng: -87.6225},
+            {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381}
+        ];
+
+        // 4. Calculate sunlight and plot points
+        var now = new Date();
+
+        bases.forEach(function(base) {
+            // Get sun position for the base's coordinates right now
+            var sunPos = SunCalc.getPosition(now, base.lat, base.lng);
+            
+            // If altitude is greater than 0, the sun is above the horizon
+            var isDaylight = sunPos.altitude > 0;
+
+            // Set marker styling based on daylight status
+            var outlineColor = isDaylight ? '#ffaa00' : '#222222';
+            var fillColor = isDaylight ? '#ffcc00' : '#444444';
+
+            // Create a circle marker
+            var marker = L.circleMarker([base.lat, base.lng], {
+                radius: 6,
+                color: outlineColor,
+                fillColor: fillColor,
+                fillOpacity: 0.9,
+                weight: 2
+            }).addTo(map);
+
+            // Add a popup when clicked
+            marker.bindPopup(
+                `<strong>${base.name}</strong><br>` +
+                `Current Status: ${isDaylight ? '☀️ Daylight' : '🌙 Night'}`
+            );
+        });
+    </script>
+</body>
+</html>
