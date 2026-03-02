@@ -129,17 +129,31 @@
 
         var terminator = L.terminator().addTo(map);
 
-        //base array
+//base array
         var bases =[
-            // --- Asia / Pacific ---
+            // --- Asia / Pacific (INDOPACOM) ---
             {name: "Kadena Air Base, Japan", lat: 26.3556, lng: 127.7675},
             {name: "Misawa Air Base, Japan", lat: 40.7042, lng: 141.3688},
+            // NEW: Commander Fleet Activities Yokosuka (HQ US 7th Fleet), Japan
+            {name: "CFA Yokosuka, Japan", lat: 35.2933, lng: 139.6631}, 
+            // NEW: Yokota Air Base (HQ US Forces Japan), Japan
+            {name: "Yokota Air Base, Japan", lat: 35.7486, lng: 139.3486}, 
+            // NEW: Marine Corps Air Station Iwakuni, Japan
+            {name: "MCAS Iwakuni, Japan", lat: 34.1439, lng: 132.2356},
+            // NEW: Camp Foster (Marine Corps Base Camp Butler), Okinawa, Japan
+            {name: "Camp Foster, Japan", lat: 26.2997, lng: 127.7781}, 
             {name: "Camp Humphreys, South Korea", lat: 36.9606, lng: 127.0286},
             {name: "Osan Air Base, South Korea", lat: 37.0855, lng: 127.0312},
+            // NEW: Kunsan Air Base (8th Fighter Wing), South Korea
+            {name: "Kunsan Air Base, South Korea", lat: 35.9036, lng: 126.6156},
             {name: "Andersen AFB, Guam", lat: 13.5841, lng: 144.9244},
+            // NEW: Naval Base Guam (Apra Harbor)
+            {name: "Naval Base Guam", lat: 13.3897, lng: 144.6467},
             {name: "Wake Island Airfield", lat: 19.2804, lng: 166.6476},
             {name: "Kwajalein Atoll (USAKA), Marshall Islands", lat: 8.7200, lng: 167.7300},
             {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381},
+            // NEW: Sembawang Naval Installation (COMLOG WESTPAC), Singapore
+            {name: "Sembawang Naval Installation, Singapore", lat: 1.4628, lng: 103.8242},
             {name: "Pearl Harbor, Hawaii", lat: 21.3445, lng: -157.9745},
             {name: "Diego Garcia, BIOT", lat: -7.3133, lng: 72.4111},
 
@@ -152,12 +166,26 @@
 
             // --- Europe / Atlantic ---
             {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
+            // NEW: Spangdahlem Air Base (52nd Fighter Wing), Germany
+            {name: "Spangdahlem Air Base, Germany", lat: 49.9744, lng: 6.6933},
+            // NEW: USAG Stuttgart (HQ EUCOM & AFRICOM), Germany
+            {name: "USAG Stuttgart, Germany", lat: 48.7350, lng: 9.0811},
+            // NEW: USAG Bavaria (Grafenwöhr Training Area), Germany
+            {name: "USAG Bavaria, Germany", lat: 49.7150, lng: 11.9022},
             {name: "RAF Lakenheath, UK", lat: 52.4138, lng: 0.5562},
+            // NEW: RAF Mildenhall (100th Air Refueling Wing), UK
+            {name: "RAF Mildenhall, UK", lat: 52.3611, lng: 0.4811},
             {name: "Naval Station Rota, Spain", lat: 36.6433, lng: -6.3486},
             {name: "Aviano Air Base, Italy", lat: 46.0305, lng: 12.5956},
+            // NEW: Caserma Ederle (173rd Airborne Brigade), Italy
+            {name: "Caserma Ederle, Italy", lat: 45.5414, lng: 11.5750},
+            // NEW: NSA Naples (HQ US Naval Forces Europe/6th Fleet), Italy
+            {name: "NSA Naples, Italy", lat: 40.8847, lng: 14.2883},
             {name: "NAS Sigonella, Italy", lat: 37.4022, lng: 14.9216},
             {name: "Incirlik Air Base, Turkey", lat: 37.0019, lng: 35.4258},
             {name: "Camp Bondsteel, Kosovo", lat: 42.3662, lng: 21.2464},
+            // NEW: Chièvres Air Base (USAG Benelux / SHAPE), Belgium
+            {name: "Chièvres Air Base, Belgium", lat: 50.5758, lng: 3.8311},
             {name: "Lajes Field, Azores", lat: 38.7308, lng: -27.0906},
             {name: "RAF Ascension Island", lat: -7.9696, lng: -14.3937},
 
