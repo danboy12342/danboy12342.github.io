@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown</title>
+    <style>
+      body {
+          background-color: black;
+          color: white;
+          font-family: "Times New Roman", Times, serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          overflow: hidden;
+      }
+
+      .eva-container {
+          display: flex;
+          flex-direction: column;
+          text-align: left;
+          text-shadow:
+              0 0 4px rgba(255, 230, 150, 0.9),
+              0 0 10px rgba(255, 180, 80, 0.6),
+              0 0 15px rgba(255, 150, 50, 0.4);
+          transform: scaleY(1.15);
+      }
+
+      .line-standard {
+          font-size: 5rem;
+          font-weight: 900;
+          letter-spacing: -2px;
+          line-height: 0.85;
+      }
+
+      .line-large {
+          font-size: 10rem;
+          font-weight: 900;
+          letter-spacing: -4px;
+          line-height: 0.85;
+          margin-top: 10px;
+      }
+
+      .line-small {
+          font-size: 4rem;
+          font-weight: 900;
+          margin-top: 15px;
+          letter-spacing: -1px;
+      }
+
+      .line-timer {
+          font-size: 3rem;
+          font-weight: 900;
+          letter-spacing: 2px;
+          margin-top: 5px;
+          color: #ffcc66; /* Slight yellow tint for the active timer */
+      }
+
+      .line-japanese {
+          font-family: "Sawarabi Mincho", "MS Mincho", "Hiragino Mincho Pro", serif;
+          font-size: 2.5rem;
+          margin-top: 40px;
+          text-align: right;
+          letter-spacing: 2px;
+          font-weight: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="eva-container">
+      <div class="line-standard">GLIDER LAB</div>
+      <div class="line-standard">GROUP REPORT</div>
+      <div class="line-large">DUE IN:</div>
+
+      <div class="line-small" id="days-remaining">CALCULATING...</div>
+      <div class="line-timer" id="time-remaining"></div>
+
+      <div class="line-japanese">世界の中心でアイを叫んだけもの</div>
+    </div>
+
+    <script>
+      // Set the exact target date (Friday, April 10, 2026 at 12:00 AM)
+      const targetDate = new Date("April 10, 2026 00:00:00").getTime();
+
+      // Update the countdown every 1 second
+      const countdownInterval = setInterval(function() {
+
+          // Get the current time
+          const now = new Date().getTime();
+
+          // Find the distance between now and the target date
+          const distance = targetDate - now;
+
+          // Time calculations for days, hours, minutes and seconds
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          // Pad the numbers with leading zeros (e.g., "09" instead of "9")
+          const formattedHours = hours.toString().padStart(2, '0');
+          const formattedMinutes = minutes.toString().padStart(2, '0');
+          const formattedSeconds = seconds.toString().padStart(2, '0');
+
+          // Output the results to the HTML elements
+          if (days === 1) {
+              document.getElementById("days-remaining").innerText = "1 DAY";
+          } else {
+              document.getElementById("days-remaining").innerText = days + " DAYS";
+          }
+
+          document.getElementById("time-remaining").innerText = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+
+          // If the countdown is finished, display a message
+          if (distance < 0) {
+              clearInterval(countdownInterval);
+              document.getElementById("days-remaining").innerText = "TIME'S UP";
+              document.getElementById("time-remaining").innerText = "00:00:00";
+              document.getElementById("time-remaining").style.color = "red"; // Turns red when late!
+          }
+      }, 1000); // 1000 milliseconds = 1 second
+    </script>
+  </body>
+</html>
