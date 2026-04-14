@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAGI System - Operating Manual</title>
+    <!-- Use root favicon -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <style>
+        @font-face {
+            font-weight: 900;
+            font-family: FOTMatisseProEB;
+            src: url(matisse-split.woff);
+        }
+
+        body {
+            background-color: #000;
+            color: orange;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 5vw 10vw;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: FOTMatisseProEB, 'EVA-Matisse_Classic', serif;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid orange;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .classified {
+            color: #C00; /* NERV Red */
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid #C00;
+            display: inline-block;
+            padding: 5px 15px;
+            margin-bottom: 30px;
+            animation: blink 2s infinite step-end;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: rgba(255, 165, 0, 0.05);
+            padding: 20px;
+            border-left: 4px solid orange;
+        }
+
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            color: chartreuse; /* NERV Green */
+            font-weight: bold;
+        }
+
+        /* Navigation Links at the bottom */
+        .sys-nav {
+            margin-top: 60px;
+            border-top: 1px dashed orange;
+            padding-top: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-family: FOTMatisseProEB, 'EVA-Matisse_Classic', serif;
+            font-size: 1.2rem;
+        }
+
+        .sys-nav a {
+            color: aquamarine;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sys-nav a:hover {
+            color: #000;
+            background-color: aquamarine;
+            border-color: aquamarine;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="classified">WARNING: TOP SECRET - NERV PERSONNEL ONLY</div>
+
+    <h1>MAGI Supercomputer System</h1>
+    <h2>Operating Instructions</h2>
+
+    <div class="section">
+        <h3>1. Initiating Resolution (Voting)</h3>
+        <p>To trigger a system-wide resolution query between the three bio-computer cores (MELCHIOR-1, BALTHASAR-2, CASPER-3), simply <span class="highlight">Press the Spacebar</span> or <span class="highlight">Click anywhere</span> on the empty space of the terminal interface.</p>
+    </div>
+
+    <div class="section">
+        <h3>2. System Override (Text Editing)</h3>
+        <p>The MAGI terminal allows for dynamic text replacement for presentation purposes. You may <span class="highlight">click directly on the text</span> of the following elements to type and overwrite them:</p>
+        <ul>
+            <li>Top Banners (Default: 提訴 / 決議)</li>
+            <li>Center Logo (Default: MAGI)</li>
+            <li>Computer Designations (Default: MELCHIOR, BALTHASAR, CASPER)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>3. Parameter Configuration</h3>
+        <p>Access the sidebar menu to adjust the underlying system parameters:</p>
+        <ul>
+            <li><strong>Volume (%):</strong> Modifies the probability of a "Reject" vote. Higher volume = higher chance of rejection.</li>
+            <li><strong>Text Accept/Reject:</strong> Click these values to input custom strings for the final voting flash sequence (e.g., changing them from 承認/否定 to YES/NO).</li>
+            <li><strong>EX_MODE:</strong> Toggles hardware acceleration. Engaging EX_MODE significantly increases the strobe/flash speed during the voting sequence.</li>
+        </ul>
+    </div>
+
+    <!-- NERV Navigation Menu -->
+    <div class="sys-nav">
+        <a href="magisys.html">[ RETURN TO MAGI ]</a>
+        <a href="../index.html">[ MAIN DIRECTORY ]</a>
+        <a href="../filesystem.html">[ FILE SYSTEM ]</a>
+        <a href="../cat.html">[ CAT_SYS ]</a>
+    </div>
+
+</body>
+</html>
