@@ -8,23 +8,12 @@ if(
 
 document.documentElement.setAttribute('data-device',device)
 
-// console.log(navigator.userAgent)
-
-// if(device === 'ios'){
-//     document.documentElement.style.setProperty('--max-width', `${window.innerHeight}px`);
-// }
-
-
-
 const $ = s=>document.querySelector(s);
 const $$ = s=>[...document.querySelectorAll(s)];
 const finalVoteStatusEl = $('.final-vote-status');
 const casperEl = $('.casper');
 const items = $$('.magi-item');
 const bodyEl = document.body;
-
-
-
 
 const randAll = _=>{
     $('.code').innerHTML = 100 + Math.floor(Math.random() * 600);
@@ -39,12 +28,6 @@ soundEl.onclick = e=>{
 };
 soundEl.setAttribute('data-text',sound?'ON':'OFF');
 
-
-
-// https://codepen.io/jonoliver/pen/NoawPv
-// https://tomhazledine.com/web-audio-delay/
-
-// https://mdn.github.io/webaudio-examples/step-sequencer/
 let play = _=>{
     startWebAudio();
     play()
@@ -53,16 +36,13 @@ let stopAll = _=>{};
 let playOscillator = _=>{}
 
 let audioCtx;
-
 let osc;
 let lfo;    
 let VCO;
 let carrierVolume;
 AudioContext = (window.AudioContext||window.webkitAudioContext);
 let load = _=>{
-    // startWebAudio = _=>{};
     audioCtx = new AudioContext();
-    
     audioCtx.addEventListener('close',e=>{
         console.log('close')
     })
@@ -85,10 +65,9 @@ let startWebAudio = _=>{
         lfo.frequency.value = exMode?30:10;
     
         lfo.connect(carrierVolume.gain);
-        osc.connect(carrierVolume);//.connect(audioCtx.destination);
+        osc.connect(carrierVolume);
         lfo.start(0);
         osc.start(0);
-        // carrierVolume.gain.linearRampToValueAtTime(.1, 0);
     }
     
     playOscillator = (hz = 3400)=>{
@@ -101,7 +80,6 @@ let startWebAudio = _=>{
         VCO.connect(carrierVolume);
         VCO.start(0);
         VCO.stop(audioCtx.currentTime + .8);
-        // carrierVolume.gain.linearRampToValueAtTime(.1, 0);
     }
     stopAll = _=> {
         try{
@@ -111,29 +89,22 @@ let startWebAudio = _=>{
         try{
             VCO.stop(audioCtx.currentTime);
         }catch(e){}
-        // audioCtx = null;
     }
 };
+
 document.addEventListener('visibilitychange',e=>{
-    // console.log(document['hidden'])
     if( document['hidden'] ){
         stopAll();
         try{
             audioCtx.close();
             audioCtx = null;
         }catch(e){}
-    }else{
-        
     }
 })
-// document.addEventListener('touchstart',startWebAudio,{
-//     once:true
-// })
+
 if(!AudioContext){
     soundEl.setAttribute('data-text','ERR');
 }
-
-
 
 let volume = 66;
 let reject;
@@ -143,8 +114,6 @@ const one = _=>{
         'data-status',
         voteStatus
     );
-
-
 
     if(sound){
         stopAll();
@@ -172,7 +141,6 @@ const one = _=>{
                     }
                 });
             }
-            // bodyEl.setAttribute('data-status','data-status="voted"')
             finalVoteStatusEl.setAttribute('data-status','reject');
         }else{
             items.forEach(el=>el.setAttribute('data-status','resolve'));
@@ -180,24 +148,30 @@ const one = _=>{
         }
 
         bodyEl.setAttribute('data-vote-status',reject?'reject':'resolve');
-    
         randAll()
     }
-    
-
-
 };
+
 randAll();
 $('.magi-box').onclick = one;
+
+// MODIFIED TO STOP TYPING FROM TRIGGERING THE VOTE
 window.onkeydown = e=>{
     const { keyCode } = e;
+    
+    // If the user is typing in a contenteditable field, don't trigger the vote
+    if (e.target.isContentEditable) return;
 
     if(keyCode === 32){
+        e.preventDefault();
         one();
     }
-
 }
 
+// STOP CLICKS ON EDITABLE TEXT FROM TRIGGERING THE VOTE
+$$('[contenteditable="true"]').forEach(el => {
+    el.onclick = e => e.stopPropagation();
+});
 
 //reset
 $('.reset').onclick = e=>{
@@ -206,7 +180,6 @@ $('.reset').onclick = e=>{
 }
 
 $('footer').onclick=e=>e.stopPropagation();
-
 
 // ex mode
 let exMode = false;
@@ -227,84 +200,55 @@ fileEl.onclick = e=>{
     fileEl.innerText = prompt('INPUT FILE',fileEl.innerText) || 'MAGI_SYS';
 }
 
+// NEW CONTROLS FOR CUSTOM TEXT GENERATOR
+const textAcceptEl = $('.text-accept');
+textAcceptEl.onclick = e => {
+    e.stopPropagation();
+    const newText = prompt('INPUT ACCEPT TEXT', textAcceptEl.innerText) || '承認';
+    textAcceptEl.innerText = newText;
+    document.documentElement.style.setProperty('--text-resolve', `"${newText}"`);
+};
+
+const textRejectEl = $('.text-reject');
+textRejectEl.onclick = e => {
+    e.stopPropagation();
+    const newText = prompt('INPUT REJECT TEXT', textRejectEl.innerText) || '否定';
+    textRejectEl.innerText = newText;
+    document.documentElement.style.setProperty('--text-reject', `"${newText}"`);
+};
+// END NEW CONTROLS
 
 // volume
 const volumeEl = $('.volume');
-const volumes = [
-    1,
-    10,
-    33,
-    50,
-    66,
-    90,
-    65535,
-];
+const volumes =[1, 10, 33, 50, 66, 90, 65535];
 volumeEl.onclick = e=>{
     e.stopPropagation();
     const index = volumes.indexOf(volume);
         
     let nextIndex = index + 1;
-
     if(nextIndex >= volumes.length){
         nextIndex = 0;
     }
-
     volume = volumes[nextIndex];
-
     volumeEl.setAttribute('data-text',volume);
 }
 
 // priority
 const priorityEl = $('.priority');
 let priority = 'A';
-const prioritys = [
-    'E',
-    '+++',
-    'A',
-    'AA',
-    'AAA',
-];
+const prioritys =['E', '+++', 'A', 'AA', 'AAA'];
 priorityEl.onclick = e=>{
     e.stopPropagation();
     const index = prioritys.indexOf(priority);
         
     let nextIndex = index + 1;
-
     if(nextIndex >= prioritys.length){
         nextIndex = 0;
     }
-
     priority = prioritys[nextIndex];
-
     priorityEl.setAttribute('data-text',priority);
 }
-
-
-
-
 
 setTimeout(_=>{
     bodyEl.removeAttribute('data-loading')
 },1000);
-
-
-
-window._hmt = [];
-window.dataLayer = [
-    ['js', new Date()],
-    ['config', 'G-13BQC1VDD8']
-];
-window.gtag = function(){dataLayer.push(arguments)};
-
-const headEl = $('head');
-const loadScript = (src,cb=_=>{},el) =>{
-	el = document.createElement('script');
-	el.src = src;
-	el.onload=cb;
-	headEl.appendChild(el);
-};
-
-setTimeout(_=>{
-	loadScript('//hm.baidu.com/hm.js?f4e477c61adf5c145ce938a05611d5f0');
-	loadScript('//www.googletagmanager.com/gtag/js?id=G-13BQC1VDD8');
-},400);

@@ -9,10 +9,24 @@
     --app-height: 100vh;
 
     --flash-time: .4s;
+
+    /* NEW TEXT VARIABLES FOR JAVASCRIPT TO TARGET */
+    --text-resolve: "承認";
+    --text-reject: "否定";
+    --text-voting: "審議中";
 }
 
 body[data-ex-mode="true"]{
     --flash-time: .1s;
+}
+
+/* NEW RULE: Make editable text look clean */
+[contenteditable="true"] {
+    outline: none;
+    cursor: text;
+}
+[contenteditable="true"]:focus {
+    border-bottom: 2px dashed var(--color-orange);
 }
 
 @font-face {
@@ -30,14 +44,6 @@ html{
     color: var(--color-orange);
     text-align: center;
     overflow: hidden;
-    // background: repeating-linear-gradient(
-    //     45deg,
-    //     var(--color-black), 
-    //     var(--color-black) 1em,
-    //     var(--color-orange) 1em,
-    //     var(--color-orange) 2em
-    // );
-    // animation: origin 5s infinite linear;
 
     font-variant-east-asian: proportional-width;
     -moz-font-feature-settings: "pwid";
@@ -46,19 +52,13 @@ html{
 
     -webkit-text-size-adjust:none;
 }
-@keyframes origin {
-    100%{
-        background-position: 1em 1em;
-    }
-}
+
 body{
     background:var(--color-black);
     box-shadow: 0 0 0 var(--body-padding) var(--color-orange) inset;
-    // margin:var(--body-padding);
     margin:0;
     box-sizing: border-box;
     height:var(--app-height);
-    // height: -webkit-fill-available;
     position: relative;
     overflow: hidden;
     &[data-status="voted"]{
@@ -91,7 +91,6 @@ html[data-device="ios"]{
     --app-height:-webkit-fill-available;
     body{
         min-height:-webkit-fill-available;
-        // height: calc(var(--app-height) - var(--body-padding) * 4);
     }
     .magi-box{
         height:-webkit-fill-available;
@@ -172,9 +171,6 @@ header{
     p{
         line-height: 1.4;
         transform: scale(1,1.4);
-        b{
-            // margin-left:.2em;
-        }
     }
 
     .reset{
@@ -183,18 +179,14 @@ header{
         margin:1em 0;
         padding:0 .3em;
         line-height: 1.4;
-        // border-radius: 1px;
         transform: scale(1);
         box-shadow: 0 0 0 .1em currentColor;
     }
-}
-
-[data-text]{
+}[data-text]{
     &:before{
         content: attr(data-text);
     }
-}
-[data-text="ERR"]{
+}[data-text="ERR"]{
     pointer-events: none;
 }
 .volume{
@@ -220,7 +212,6 @@ header{
     height: 8em;
     line-height: 8em;
 
-
     border-radius: 9em;
     font-size: 2em;
     box-shadow:0 0 0 .18em currentColor;
@@ -244,13 +235,6 @@ header{
         transform: scale(.4);
     }
 }
-.magi-list{
-    // position: absolute;
-    // bottom:0;
-    // left:0;
-    // right:0;
-    // padding:20px;
-}
 .magi-item{
     width: 8em;
     height:8em;
@@ -259,7 +243,6 @@ header{
         0 0 0 .1em var(--color-black),
         0 0 0 .4em currentColor,
         0 0 0 .5em var(--color-black);
-    background:var(--color-blue);
     background:var(--color-green);
     text-align: center;
     padding:0;
@@ -283,11 +266,8 @@ header{
     position: absolute;
     top:50%;
 
-
-
     &.melchior{
         left:50%;
-        // transform: translate(20%,30%);
         transform: translate(35%,10%) rotate(-57deg);
         h2{
             &:before{
@@ -306,7 +286,6 @@ header{
     }
     &.casper{
         right:50%;
-        // transform: translate(-20%,30%);
         transform: translate(-35%,10%) rotate(57deg);
         h2{
             &:before{
@@ -314,9 +293,7 @@ header{
             }
         }
     }
-    
 }
-
 
 .final-vote-status{
     position: absolute;
@@ -332,24 +309,23 @@ header{
         0 0 0 .03em currentColor,
         0 0 0 .07em var(--color-black),
         0 0 0 .1em currentColor;
-    // border-radius: 1px;
     &:before{
         display: inline-block;
         transform: scale(.85,1);
     }
 
-
+    /* UPDATED: USING CSS VARIABLES */
     &[data-status="reject"]{
         color:var(--color-red);
         &:before{
-            content: '否定';
+            content: var(--text-reject);
         }
     }
     
     &[data-status="resolve"]{
         color:var(--color-green);
         &:before{
-            content: '承認';
+            content: var(--text-resolve);
         }
     }
 }
@@ -362,50 +338,38 @@ body[data-status="voting"]{
         background:var(--color-green);
         animation: magi-flash var(--flash-time) infinite step-end;
 
-
         h2{
             &:before{
                 font-size:.6em;
                 font-family: FOTMatisseProEB,'EVA-Matisse_Classic',serif;
-                content: '承認';
+                content: var(--text-resolve);
                 animation: value-flash var(--flash-time) infinite step-end;
             }
         }
 
-        &.melchior{
-            animation-delay: .1s;
-        }
-        &.malthasar{
-            animation-delay: .2s;
-        }
-        &.casper{
-            animation-delay: .3s;
-        }
-
-
+        &.melchior{ animation-delay: .1s; }
+        &.malthasar{ animation-delay: .2s; }
+        &.casper{ animation-delay: .3s; }
     }
+
     @keyframes magi-flash {
-        // 49.9%{ background-color: var(--color-blue); }
         50%{ background-color: var(--color-red); }
     }
 
+    /* UPDATED: USING CSS VARIABLES */
     @keyframes value-flash {
-        50%{
-            content: '否定';
-        }
+        50%{ content: var(--text-reject); }
     }
-
 
     .final-vote-status{
         visibility: visible;
         animation: flash var(--flash-time) infinite step-end;
         color: var(--color-yellow);
         &:before{
-            content: '審議中';
+            content: var(--text-voting);
         }
     }
     @keyframes flash {
-        // 49.9%{ background-color: var(--color-blue); }
         60%{ visibility: hidden; }
     }
 }
@@ -419,18 +383,19 @@ body[data-status="voted"]{
         margin:0 .5em;
     }
     .magi-item{
-
         h2{
             &:before{
                 font-size:.6em;
                 font-family: FOTMatisseProEB,'EVA-Matisse_Classic',serif;
             }
         }
+        
+        /* UPDATED: USING CSS VARIABLES */
         &[data-status="resolve"]{
             background:var(--color-green);
             h2{
                 &:before{
-                    content:'承認';
+                    content: var(--text-resolve);
                 }
             }
         }
@@ -438,7 +403,7 @@ body[data-status="voted"]{
             background:var(--color-red);
             h2{
                 &:before{
-                    content:'否定';
+                    content: var(--text-reject);
                 }
             }
             animation: red-flash 1s infinite ease;
@@ -459,90 +424,28 @@ footer{
     padding:.5em .7em;
 }
 
-
-@media (max-width:1000px), (max-height:800px) {
-    html{
-        font-size:1.5em;
-    }
-}
-
-@media (max-width:700px), (max-height:700px){
-    :root{
-        --body-padding: 15px;
-    }
-    html{
-        font-size:1.2em;
-    }
-}
+@media (max-width:1000px), (max-height:800px) { html{ font-size:1.5em; } }
+@media (max-width:700px), (max-height:700px){ :root{ --body-padding: 15px; } html{ font-size:1.2em; } }
 @media (max-width:700px){
-    .magi-list{
-        position: absolute;
-        top: 60%;
-        left: 50%;
-    }
-    .magi-logo{
-        top:20%;
-    }
+    .magi-list{ position: absolute; top: 60%; left: 50%; }
+    .magi-logo{ top:20%; }
 }
+@media (max-width:520px), (max-height:520px){ :root{ --body-padding: 12px; } html{ font-size:.9em; } }
+@media (max-width:400px), (max-height:400px){ :root{ --body-padding: 10px; } html{ font-size:.8em; } }
 
-@media (max-width:520px), (max-height:520px){
-    :root{
-        --body-padding: 12px;
-    }
-    html{
-        font-size:.9em;
-    }
-}
-@media (max-width:400px), (max-height:400px){
-    :root{
-        --body-padding: 10px;
-    }
-    html{
-        font-size:.8em;
-    }
-}
+body{ transition: color 1s ease, box-shadow 1s ease; }
+.magi-logo{ transition: top 1s ease, transform 1s ease; &:after{ transition: opacity .5s ease; } }
+.magi-box{ transition: transform 1.4s ease-out, opacity .5s ease; }
+footer{ transition: transform .3s ease, opacity .3s ease; }
 
-
-body{
-    transition:
-        color 1s ease,
-        box-shadow 1s ease;
-}
-.magi-logo{
-    transition:
-        top 1s ease,
-        transform 1s ease;
-        &:after{
-            transition:
-                opacity .5s ease;
-        }
-}
-.magi-box{
-    transition:
-        transform 1.4s ease-out,
-        opacity .5s ease;
-}
-footer{
-    transition:
-        transform .3s ease,
-        opacity .3s ease;
-}
 body[data-loading="true"]{
     box-shadow: 0 0 0 0 var(--color-orange) inset;
     .magi-logo{
         top:0;
         transition:transform .3s ease;
         transform: scale(4,4);
-        &:after{
-            opacity: 1;
-        }
+        &:after{ opacity: 1; }
     }
-    .magi-box{
-        transform: scale(.9);
-        opacity: 0;
-    }
-    footer{
-        opacity: 0;
-        transform: translate(0,10px);
-    }
+    .magi-box{ transform: scale(.9); opacity: 0; }
+    footer{ opacity: 0; transform: translate(0,10px); }
 }
