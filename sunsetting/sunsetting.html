@@ -1,111 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Sun Never Sets</title>
-    
+
     <link rel="icon" href="../favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
     <!-- IMPORT UBUNTU FONT FROM GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        /* APPLIED UBUNTU FONT HERE */
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Ubuntu', sans-serif; }
-        #map { height: 100vh; width: 100vw; background: #a2c8db; }
-        
-        #ui-box {
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
+      /* APPLIED UBUNTU FONT HERE */
+      body, html { margin: 0; padding: 0; height: 100%; font-family: 'Ubuntu', sans-serif; }
+      #map { height: 100vh; width: 100vw; background: #a2c8db; }
 
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 15px;
-            text-decoration: none;
-            color: #7dd3fc;
-            background: #222;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 700;
-            transition: background 0.2s, color 0.2s;
-        }
+      #ui-box {
+          position: absolute;
+          bottom: 30px;
+          left: 30px;
+          background: rgba(255, 255, 255, 0.95);
+          padding: 20px 25px;
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+          z-index: 1000;
+      }
 
-        .back-btn:hover {
-            background: #333;
-            color: #bae6fd;
-        }
-        
-        h1 { margin: 0 0 10px 0; font-size: 20px; color: #222; font-weight: 700; }
-        p { margin: 0; font-size: 14px; color: #555; font-weight: 400; }
-        .legend { margin-top: 15px; }
-        .legend p { margin-bottom: 5px; }
-        
-        /* Legend formatting */
-        .legend span { 
-            display: inline-block; 
-            width: 12px; 
-            height: 12px; 
-            border-radius: 50%; 
-            margin-right: 5px; 
-        }
-        .sun-legend { background: #ffcc00; border: 2px solid #ffaa00; box-shadow: 0 0 6px #ffcc00; }
-        .night-legend { background: #444; border: 2px solid #222; }
+      .back-btn {
+          display: inline-block;
+          margin-bottom: 15px;
+          text-decoration: none;
+          color: #7dd3fc;
+          background: #222;
+          padding: 5px 10px;
+          border-radius: 4px;
+          font-size: 14px;
+          font-weight: 700;
+          transition: background 0.2s, color 0.2s;
+      }
 
-        /* CUSTOM LEAFLET MARKERS */
-        .base-icon-container {
-            background: transparent;
-            border: none;
-        }
+      .back-btn:hover {
+          background: #333;
+          color: #bae6fd;
+      }
 
-        .marker-night {
-            width: 12px;
-            height: 12px;
-            background: #444;
-            border: 2px solid #222;
-            border-radius: 50%;
-            box-sizing: border-box;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-        }
+      h1 { margin: 0 0 10px 0; font-size: 20px; color: #222; font-weight: 700; }
+      p { margin: 0; font-size: 14px; color: #555; font-weight: 400; }
+      .legend { margin-top: 15px; }
+      .legend p { margin-bottom: 5px; }
 
-        .marker-day {
-            width: 14px;
-            height: 14px;
-            background: #ffcc00;
-            border: 2px solid #ffaa00;
-            border-radius: 50%;
-            box-sizing: border-box;
-            /* Attach the CSS pulse animation */
-            animation: pulse-glow 1.5s infinite alternate;
-        }
+      /* Legend formatting */
+      .legend span {
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          margin-right: 5px;
+      }
+      .sun-legend { background: #ffcc00; border: 2px solid #ffaa00; box-shadow: 0 0 6px #ffcc00; }
+      .night-legend { background: #444; border: 2px solid #222; }
 
-        /* The glowing pulse effect */
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 4px #ffaa00, inset 0 0 2px #ffaa00; }
-            100% { box-shadow: 0 0 16px #ffcc00, inset 0 0 6px #ffaa00; }
-        }
+      /* CUSTOM LEAFLET MARKERS */
+      .base-icon-container {
+          background: transparent;
+          border: none;
+      }
+
+      .marker-night {
+          width: 12px;
+          height: 12px;
+          background: #444;
+          border: 2px solid #222;
+          border-radius: 50%;
+          box-sizing: border-box;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+      }
+
+      .marker-day {
+          width: 14px;
+          height: 14px;
+          background: #ffcc00;
+          border: 2px solid #ffaa00;
+          border-radius: 50%;
+          box-sizing: border-box;
+          /* Attach the CSS pulse animation */
+          animation: pulse-glow 1.5s infinite alternate;
+      }
+
+      /* The glowing pulse effect */
+      @keyframes pulse-glow {
+          0% { box-shadow: 0 0 4px #ffaa00, inset 0 0 2px #ffaa00; }
+          100% { box-shadow: 0 0 16px #ffcc00, inset 0 0 6px #ffaa00; }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div id="ui-box">
-        <a href="../index.html" class="back-btn">← Back to Terminal</a>
-        <h1>The Sun Never Sets...</h1>
-        <p>Real-time sunlight tracking across US global installations.</p>
-        
-        <div class="legend">
-            <p><span class="sun-legend"></span> In Daylight</p>
-            <p><span class="night-legend"></span> In Darkness</p>
-        </div>
+      <a href="../index.html" class="back-btn">← Back to Terminal</a>
+      <h1>The Sun Never Sets...</h1>
+      <p>Real-time sunlight tracking across US global installations.</p>
+
+      <div class="legend">
+        <p><span class="sun-legend"></span> In Daylight</p>
+        <p><span class="night-legend"></span> In Darkness</p>
+      </div>
     </div>
 
     <div id="map"></div>
@@ -115,174 +120,145 @@
     <script src="https://unpkg.com/@joergdietrich/leaflet.terminator"></script>
 
     <script>
-        //init map
-        var map = L.map('map', {
-            center:[25, 0],
-            zoom: 2,
-            minZoom: 2,
-            worldCopyJump: true
-        });
+      //init map
+      var map = L.map('map', {
+          center:[25, 0],
+          zoom: 2,
+          minZoom: 2,
+          worldCopyJump: true
+      });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-        }).addTo(map);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+      }).addTo(map);
 
-        var terminator = L.terminator().addTo(map);
+      var terminator = L.terminator().addTo(map);
 
-//base array
-        var bases =[
-            // --- Asia / Pacific (INDOPACOM) ---
-            {name: "Kadena Air Base, Japan", lat: 26.3556, lng: 127.7675},
-            {name: "Misawa Air Base, Japan", lat: 40.7042, lng: 141.3688},
-            // NEW: Commander Fleet Activities Yokosuka (HQ US 7th Fleet), Japan
-            {name: "CFA Yokosuka, Japan", lat: 35.2933, lng: 139.6631}, 
-            // NEW: Yokota Air Base (HQ US Forces Japan), Japan
-            {name: "Yokota Air Base, Japan", lat: 35.7486, lng: 139.3486}, 
-            // NEW: Marine Corps Air Station Iwakuni, Japan
-            {name: "MCAS Iwakuni, Japan", lat: 34.1439, lng: 132.2356},
-            // NEW: Camp Foster (Marine Corps Base Camp Butler), Okinawa, Japan
-            {name: "Camp Foster, Japan", lat: 26.2997, lng: 127.7781}, 
-            {name: "Camp Humphreys, South Korea", lat: 36.9606, lng: 127.0286},
-            {name: "Osan Air Base, South Korea", lat: 37.0855, lng: 127.0312},
-            // NEW: Kunsan Air Base (8th Fighter Wing), South Korea
-            {name: "Kunsan Air Base, South Korea", lat: 35.9036, lng: 126.6156},
-            {name: "Andersen AFB, Guam", lat: 13.5841, lng: 144.9244},
-            // NEW: Naval Base Guam (Apra Harbor)
-            {name: "Naval Base Guam", lat: 13.3897, lng: 144.6467},
-            {name: "Wake Island Airfield", lat: 19.2804, lng: 166.6476},
-            {name: "Kwajalein Atoll (USAKA), Marshall Islands", lat: 8.7200, lng: 167.7300},
-            {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381},
-            // NEW: Sembawang Naval Installation (COMLOG WESTPAC), Singapore
-            {name: "Sembawang Naval Installation, Singapore", lat: 1.4628, lng: 103.8242},
-            {name: "Pearl Harbor, Hawaii", lat: 21.3445, lng: -157.9745},
-            {name: "Diego Garcia, BIOT", lat: -7.3133, lng: 72.4111},
+      //base array
+      var bases =[
+          // --- Asia / Pacific ---
+          {name: "Kadena Air Base, Japan", lat: 26.3556, lng: 127.7675},
+          {name: "Misawa Air Base, Japan", lat: 40.7042, lng: 141.3688},
+          {name: "Camp Humphreys, South Korea", lat: 36.9606, lng: 127.0286},
+          {name: "Osan Air Base, South Korea", lat: 37.0855, lng: 127.0312},
+          {name: "Andersen AFB, Guam", lat: 13.5841, lng: 144.9244},
+          {name: "Wake Island Airfield", lat: 19.2804, lng: 166.6476},
+          {name: "Kwajalein Atoll (USAKA), Marshall Islands", lat: 8.7200, lng: 167.7300},
+          {name: "Pine Gap, Australia", lat: -23.7989, lng: 133.7381},
+          {name: "Pearl Harbor, Hawaii", lat: 21.3445, lng: -157.9745},
+          {name: "Diego Garcia, BIOT", lat: -7.3133, lng: 72.4111},
 
-            // --- Middle East / Africa ---
-            {name: "Al Udeid Air Base, Qatar", lat: 25.1166, lng: 51.3149},
-            {name: "Camp Arifjan, Kuwait", lat: 28.8784, lng: 48.1633},
-            {name: "NSA Bahrain", lat: 26.2064, lng: 50.6068},
-            {name: "Prince Sultan Air Base, Saudi Arabia", lat: 24.0560, lng: 47.5564},
-            {name: "Camp Lemonnier, Djibouti", lat: 11.5456, lng: 43.1481},
+          // --- Middle East / Africa ---
+          {name: "Al Udeid Air Base, Qatar", lat: 25.1166, lng: 51.3149},
+          {name: "Camp Arifjan, Kuwait", lat: 28.8784, lng: 48.1633},
+          {name: "NSA Bahrain", lat: 26.2064, lng: 50.6068},
+          {name: "Prince Sultan Air Base, Saudi Arabia", lat: 24.0560, lng: 47.5564},
+          {name: "Camp Lemonnier, Djibouti", lat: 11.5456, lng: 43.1481},
 
-            // --- Europe / Atlantic ---
-            {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
-            // NEW: Spangdahlem Air Base (52nd Fighter Wing), Germany
-            {name: "Spangdahlem Air Base, Germany", lat: 49.9744, lng: 6.6933},
-            // NEW: USAG Stuttgart (HQ EUCOM & AFRICOM), Germany
-            {name: "USAG Stuttgart, Germany", lat: 48.7350, lng: 9.0811},
-            // NEW: USAG Bavaria (Grafenwöhr Training Area), Germany
-            {name: "USAG Bavaria, Germany", lat: 49.7150, lng: 11.9022},
-            {name: "RAF Lakenheath, UK", lat: 52.4138, lng: 0.5562},
-            // NEW: RAF Mildenhall (100th Air Refueling Wing), UK
-            {name: "RAF Mildenhall, UK", lat: 52.3611, lng: 0.4811},
-            {name: "Naval Station Rota, Spain", lat: 36.6433, lng: -6.3486},
-            {name: "Aviano Air Base, Italy", lat: 46.0305, lng: 12.5956},
-            // NEW: Caserma Ederle (173rd Airborne Brigade), Italy
-            {name: "Caserma Ederle, Italy", lat: 45.5414, lng: 11.5750},
-            // NEW: NSA Naples (HQ US Naval Forces Europe/6th Fleet), Italy
-            {name: "NSA Naples, Italy", lat: 40.8847, lng: 14.2883},
-            {name: "NAS Sigonella, Italy", lat: 37.4022, lng: 14.9216},
-            {name: "Incirlik Air Base, Turkey", lat: 37.0019, lng: 35.4258},
-            {name: "Camp Bondsteel, Kosovo", lat: 42.3662, lng: 21.2464},
-            // NEW: Chièvres Air Base (USAG Benelux / SHAPE), Belgium
-            {name: "Chièvres Air Base, Belgium", lat: 50.5758, lng: 3.8311},
-            {name: "Lajes Field, Azores", lat: 38.7308, lng: -27.0906},
-            {name: "RAF Ascension Island", lat: -7.9696, lng: -14.3937},
+          // --- Europe / Atlantic ---
+          {name: "Ramstein Air Base, Germany", lat: 49.4385, lng: 7.5986},
+          {name: "RAF Lakenheath, UK", lat: 52.4138, lng: 0.5562},
+          {name: "Naval Station Rota, Spain", lat: 36.6433, lng: -6.3486},
+          {name: "Aviano Air Base, Italy", lat: 46.0305, lng: 12.5956},
+          {name: "NAS Sigonella, Italy", lat: 37.4022, lng: 14.9216},
+          {name: "Incirlik Air Base, Turkey", lat: 37.0019, lng: 35.4258},
+          {name: "Camp Bondsteel, Kosovo", lat: 42.3662, lng: 21.2464},
+          {name: "Lajes Field, Azores", lat: 38.7308, lng: -27.0906},
+          {name: "RAF Ascension Island", lat: -7.9696, lng: -14.3937},
 
-            // --- Americas / Greenland ---
-            {name: "Pituffik Space Base, Greenland", lat: 76.5312, lng: -68.7032},
-            {name: "Soto Cano Air Base, Honduras", lat: 14.3828, lng: -87.6225},
-            {name: "Naval Station Guantanamo Bay, Cuba", lat: 19.9056, lng: -75.1481},
-            
-            // --- Continental US & Alaska ---
-            {name: "JB Elmendorf-Richardson, Alaska", lat: 61.2500, lng: -149.8000},
-            {name: "Eielson AFB, Alaska", lat: 64.6655, lng: -147.1009},
-            
-            // West Coast & Rockies
-            {name: "Joint Base Lewis-McChord, WA, USA", lat: 47.1118, lng: -122.5367},
-            {name: "Naval Base Coronado, CA, USA", lat: 32.6780, lng: -117.1652},
-            {name: "Nellis AFB, NV, USA", lat: 36.2361, lng: -115.0343},
-            {name: "Cheyenne Mountain SFS, CO, USA", lat: 38.7441, lng: -104.8466},
-            {name: "Minot AFB, ND, USA", lat: 48.4158, lng: -101.3528},
+          // --- Americas / Greenland ---
+          {name: "Pituffik Space Base, Greenland", lat: 76.5312, lng: -68.7032},
+          {name: "Soto Cano Air Base, Honduras", lat: 14.3828, lng: -87.6225},
+          {name: "Naval Station Guantanamo Bay, Cuba", lat: 19.9056, lng: -75.1481},
 
-            // Midwest & Texas
-            {name: "Offutt AFB, NE, USA", lat: 41.1189, lng: -95.9124},
-            {name: "Whiteman AFB, MO, USA", lat: 38.7301, lng: -93.5476},
-            {name: "JB San Antonio, TX, USA", lat: 29.4500, lng: -98.4500},
-            {name: "Wright-Patterson AFB, OH, USA", lat: 39.8261, lng: -84.0484},
+          // --- Continental US & Alaska ---
+          {name: "JB Elmendorf-Richardson, Alaska", lat: 61.2500, lng: -149.8000},
+          {name: "Eielson AFB, Alaska", lat: 64.6655, lng: -147.1009},
 
-            // South & East Coast
-            {name: "Fort Campbell, KY/TN, USA", lat: 36.6500, lng: -87.4583},
-            {name: "Fort Liberty, NC, USA", lat: 35.1390, lng: -79.0060},
-            {name: "Camp Lejeune, NC, USA", lat: 34.6953, lng: -77.3400},
-            {name: "Naval Station Norfolk, VA, USA", lat: 36.9388, lng: -76.3276},
-            {name: "NSB Kings Bay, GA, USA", lat: 30.7966, lng: -81.5434},
-            {name: "MacDill AFB, FL, USA", lat: 27.8488, lng: -82.5204},
-            {name: "NAS Pensacola, FL, USA", lat: 30.3533, lng: -87.3150},
-            
-            // Northeast
-            {name: "West Point (USMA), NY, USA", lat: 41.3918, lng: -73.9525},
-            {name: "NSB New London, CT, USA", lat: 41.3980, lng: -72.0864},
-            {name: "Hanscom AFB, MA, USA", lat: 42.4594, lng: -71.2825}
-        ];
+          // West Coast & Rockies
+          {name: "Joint Base Lewis-McChord, WA, USA", lat: 47.1118, lng: -122.5367},
+          {name: "Naval Base Coronado, CA, USA", lat: 32.6780, lng: -117.1652},
+          {name: "Nellis AFB, NV, USA", lat: 36.2361, lng: -115.0343},
+          {name: "Cheyenne Mountain SFS, CO, USA", lat: 38.7441, lng: -104.8466},
+          {name: "Minot AFB, ND, USA", lat: 48.4158, lng: -101.3528},
 
-        // Pre-configure the custom DivIcons
-        var dayIcon = L.divIcon({
-            className: 'base-icon-container',
-            html: "<div class='marker-day'></div>",
-            iconSize: [14, 14],
-            iconAnchor: [7, 7]
-        });
+          // Midwest & Texas
+          {name: "Offutt AFB, NE, USA", lat: 41.1189, lng: -95.9124},
+          {name: "Whiteman AFB, MO, USA", lat: 38.7301, lng: -93.5476},
+          {name: "JB San Antonio, TX, USA", lat: 29.4500, lng: -98.4500},
+          {name: "Wright-Patterson AFB, OH, USA", lat: 39.8261, lng: -84.0484},
 
-        var nightIcon = L.divIcon({
-            className: 'base-icon-container',
-            html: "<div class='marker-night'></div>",
-            iconSize: [12, 12],
-            iconAnchor: [6, 6]
-        });
+          // South & East Coast
+          {name: "Fort Campbell, KY/TN, USA", lat: 36.6500, lng: -87.4583},
+          {name: "Fort Liberty, NC, USA", lat: 35.1390, lng: -79.0060},
+          {name: "Camp Lejeune, NC, USA", lat: 34.6953, lng: -77.3400},
+          {name: "Naval Station Norfolk, VA, USA", lat: 36.9388, lng: -76.3276},
+          {name: "NSB Kings Bay, GA, USA", lat: 30.7966, lng: -81.5434},
+          {name: "MacDill AFB, FL, USA", lat: 27.8488, lng: -82.5204},
+          {name: "NAS Pensacola, FL, USA", lat: 30.3533, lng: -87.3150},
 
-        var markers =[]; // Array to store map markers for updating
+          // Northeast
+          {name: "West Point (USMA), NY, USA", lat: 41.3918, lng: -73.9525},
+          {name: "NSB New London, CT, USA", lat: 41.3980, lng: -72.0864},
+          {name: "Hanscom AFB, MA, USA", lat: 42.4594, lng: -71.2825}
+      ];
 
-        //plot an update
-        function updateBases() {
-            var now = new Date();
+      // Pre-configure the custom DivIcons
+      var dayIcon = L.divIcon({
+          className: 'base-icon-container',
+          html: "<div class='marker-day'></div>",
+          iconSize: [14, 14],
+          iconAnchor: [7, 7]
+      });
 
-            bases.forEach(function(base, index) {
-                var sunPos = SunCalc.getPosition(now, base.lat, base.lng);
-                var isDaylight = sunPos.altitude > 0;
-                var popupContent = `<strong>${base.name}</strong><br>Current Status: ${isDaylight ? 'Day Time' : 'Night Time'}`;
+      var nightIcon = L.divIcon({
+          className: 'base-icon-container',
+          html: "<div class='marker-night'></div>",
+          iconSize: [12, 12],
+          iconAnchor: [6, 6]
+      });
 
-                // If the marker already exists on the map
-                if (markers[index]) {
-                    // Only swap the icon if the state has changed (stops flickering)
-                    if (markers[index].isDaylight !== isDaylight) {
-                        markers[index].setIcon(isDaylight ? dayIcon : nightIcon);
-                        markers[index].isDaylight = isDaylight; // Update tracked state
-                    }
-                    markers[index].setPopupContent(popupContent);
-                } 
-                // Create the marker for the very first time
-                else {
-                    var marker = L.marker([base.lat, base.lng], {
-                        icon: isDaylight ? dayIcon : nightIcon
-                    }).addTo(map);
-                    
-                    marker.isDaylight = isDaylight; // Store custom state on the marker
-                    marker.bindPopup(popupContent);
-                    markers[index] = marker;
-                }
-            });
-        }
+      var markers =[]; // Array to store map markers for updating
 
-        // Draw bases immediately on load
-        updateBases();
+      //plot an update
+      function updateBases() {
+          var now = new Date();
 
-        // 4. Update loops
-        setInterval(function() {
-            terminator.setTime(); // Progress shadow overlay
-            updateBases();        // Check markers to see if any just hit sunrise/sunset
-        }, 60000); 
+          bases.forEach(function(base, index) {
+              var sunPos = SunCalc.getPosition(now, base.lat, base.lng);
+              var isDaylight = sunPos.altitude > 0;
+              var popupContent = `<strong>${base.name}</strong><br>Current Status: ${isDaylight ? 'Day Time' : 'Night Time'}`;
 
+              // If the marker already exists on the map
+              if (markers[index]) {
+                  // Only swap the icon if the state has changed (stops flickering)
+                  if (markers[index].isDaylight !== isDaylight) {
+                      markers[index].setIcon(isDaylight ? dayIcon : nightIcon);
+                      markers[index].isDaylight = isDaylight; // Update tracked state
+                  }
+                  markers[index].setPopupContent(popupContent);
+              }
+              // Create the marker for the very first time
+              else {
+                  var marker = L.marker([base.lat, base.lng], {
+                      icon: isDaylight ? dayIcon : nightIcon
+                  }).addTo(map);
+
+                  marker.isDaylight = isDaylight; // Store custom state on the marker
+                  marker.bindPopup(popupContent);
+                  markers[index] = marker;
+              }
+          });
+      }
+
+      // Draw bases immediately on load
+      updateBases();
+
+      // 4. Update loops
+      setInterval(function() {
+          terminator.setTime(); // Progress shadow overlay
+          updateBases();        // Check markers to see if any just hit sunrise/sunset
+      }, 60000);
     </script>
-</body>
+  </body>
 </html>

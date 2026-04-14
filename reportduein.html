@@ -68,60 +68,58 @@
             font-weight: normal;
         }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="eva-container">
-        <div class="line-standard">GLIDER LAB</div>
-        <div class="line-standard">GROUP REPORT</div>
-        <div class="line-large">DUE IN:</div>
-        
-        <div class="line-small" id="days-remaining">CALCULATING...</div>
-        <div class="line-timer" id="time-remaining"></div>
+      <div class="line-standard">GLIDER LAB</div>
+      <div class="line-standard">GROUP REPORT</div>
+      <div class="line-large">DUE IN:</div>
 
-        <div class="line-japanese">世界の中心でアイを叫んだけもの</div>
+      <div class="line-small" id="days-remaining">CALCULATING...</div>
+      <div class="line-timer" id="time-remaining"></div>
+
+      <div class="line-japanese">世界の中心でアイを叫んだけもの</div>
     </div>
 
     <script>
-        // Set the exact target date (Friday, April 10, 2026 at 12:00 AM)
-        const targetDate = new Date("April 10, 2026 00:00:00").getTime();
+      // Set the exact target date (Monday, April 13, 2026 at 11:59 PM)
+      const targetDate = new Date("April 13, 2026 23:59:00").getTime();
 
-        const countdownInterval = setInterval(function() {
+      const countdownInterval = setInterval(function() {
 
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+          const now = new Date().getTime();
+          const distance = targetDate - now;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            const formattedHours = hours.toString().padStart(2, '0');
-            const formattedMinutes = minutes.toString().padStart(2, '0');
-            const formattedSeconds = seconds.toString().padStart(2, '0');
+          const formattedHours = hours.toString().padStart(2, '0');
+          const formattedMinutes = minutes.toString().padStart(2, '0');
+          const formattedSeconds = seconds.toString().padStart(2, '0');
 
-            // Handle singular vs plural for grammatically correct readouts
-            const hLabel = hours === 1 ? "HOUR" : "HOURS";
-            const mLabel = minutes === 1 ? "MINUTE" : "MINUTES";
-            const sLabel = seconds === 1 ? "SECOND" : "SECONDS";
+          // Handle singular vs plural for grammatically correct readouts
+          const hLabel = hours === 1 ? "HOUR" : "HOURS";
+          const mLabel = minutes === 1 ? "MINUTE" : "MINUTES";
+          const sLabel = seconds === 1 ? "SECOND" : "SECONDS";
 
-            if (days === 1) {
-                document.getElementById("days-remaining").innerText = "1 DAY";
-            } else {
-                document.getElementById("days-remaining").innerText = days + " DAYS";
-            }
-            
-            // Output with full words instead of colons
-            document.getElementById("time-remaining").innerText = `${formattedHours} ${hLabel} ${formattedMinutes} ${mLabel} ${formattedSeconds} ${sLabel}`;
+          if (days === 1) {
+              document.getElementById("days-remaining").innerText = "1 DAY";
+          } else {
+              document.getElementById("days-remaining").innerText = days + " DAYS";
+          }
 
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById("days-remaining").innerText = "TIME'S UP";
-                document.getElementById("time-remaining").innerText = "00 HOURS 00 MINUTES 00 SECONDS";
-                document.getElementById("time-remaining").style.color = "red"; 
-            }
-        }, 1000);
+          // Output with full words instead of colons
+          document.getElementById("time-remaining").innerText = `${formattedHours} ${hLabel} ${formattedMinutes} ${mLabel} ${formattedSeconds} ${sLabel}`;
+
+          if (distance < 0) {
+              clearInterval(countdownInterval);
+              document.getElementById("days-remaining").innerText = "TIME'S UP";
+              document.getElementById("time-remaining").innerText = "00 HOURS 00 MINUTES 00 SECONDS";
+              document.getElementById("time-remaining").style.color = "red";
+          }
+      }, 1000);
     </script>
-
-</body>
+  </body>
 </html>

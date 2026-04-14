@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NUCLEO-L432KC Circuit Map</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <style>
+      :root {
+        --bg:      #111214;
+        --surface: #18191d;
+        --border:  #2a2c32;
+        --border2: #1e2024;
+
+        --pwr:    #c0392b;
+        --gnd:    #2980b9;
+        --sensor: #4a90d9;
+        --nucleo: #dde3ec;
+        --lcd:    #27ae60;
+        --purple: #8e55c7;
+
+        --text:  #cdd2db;
+        --muted: #5a606e;
+        --faint: #232529;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+        padding: 32px 20px 64px;
+        line-height: 1.5;
+      }
+
+      .header {
+        max-width: 1100px;
+        margin: 0 auto 28px;
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 16px;
+      }
+
+      .header h1 {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: #eef0f4;
+      }
+
+      .header h1 span { color: var(--muted); font-weight: 400; }
+
+      .header-sub {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+      }
+
+      .legend {
+        max-width: 1100px;
+        margin: 0 auto 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .leg { display: flex; align-items: center; gap: 6px; }
+      .leg-swatch { width: 22px; height: 3px; border-radius: 1px; }
+
+      .layout {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+      }
+
+      .card-head {
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-stripe {
+        width: 3px;
+        height: 28px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .card-name {
+        font-weight: 600;
+        font-size: 13px;
+        color: #eef0f4;
+        letter-spacing: 0.01em;
+      }
+
+      .card-desc {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 1px;
+      }
+
+      table { width: 100%; border-collapse: collapse; }
+
+      thead tr { background: var(--faint); }
+
+      th {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 7px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border2);
+      }
+
+      td {
+        padding: 8px 14px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--border2);
+        vertical-align: middle;
+      }
+
+      tr:last-child td { border-bottom: none; }
+      tbody tr:hover td { background: rgba(255,255,255,0.022); }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 3px;
+        white-space: nowrap;
+        border: 1px solid;
+      }
+
+      .chip-pwr   { color: var(--pwr);    background: rgba(192,57,43,0.1);   border-color: rgba(192,57,43,0.3); }
+      .chip-gnd   { color: var(--gnd);    background: rgba(41,128,185,0.1);  border-color: rgba(41,128,185,0.3); }
+      .chip-sensor{ color: var(--sensor); background: rgba(74,144,217,0.1);  border-color: rgba(74,144,217,0.3); }
+      .chip-nucleo{ color: var(--nucleo); background: rgba(221,227,236,0.07);border-color: rgba(221,227,236,0.2); }
+      .chip-lcd   { color: var(--lcd);    background: rgba(39,174,96,0.1);   border-color: rgba(39,174,96,0.3); }
+      .chip-purple{ color: var(--purple); background: rgba(142,85,199,0.1);  border-color: rgba(142,85,199,0.3); }
+      .chip-nc    { color: var(--muted);  background: transparent;           border-color: var(--border); font-style: italic; }
+
+      .pin-raw {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 11px;
+        color: #8a909e;
+      }
+
+      .note {
+        font-size: 11px;
+        color: var(--muted);
+        font-family: 'IBM Plex Mono', monospace;
+      }
+
+      .note b { color: #c0a060; font-weight: 500; }
+
+      .rail-box {
+        max-width: 1100px;
+        margin: 16px auto 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 14px 16px;
+      }
+
+      .rail-label {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .rail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px;
+      }
+
+      .rail-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--faint);
+        border: 1px solid var(--border2);
+        border-radius: 3px;
+        padding: 9px 12px;
+      }
+
+      .rail-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+      .rail-text strong {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        font-family: 'IBM Plex Mono', monospace;
+      }
+
+      .rail-text span {
+        font-size: 11px;
+        color: var(--muted);
+        font-family: 'IBM Plex Mono', monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>NUCLEO-L432KC <span>/</span> Circuit Wiring Map</h1>
+      <div class="header-sub">
+        HC-SR04 · HD44780 · Potentiometer · Buzzer &amp; MOSFET
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="leg">
+        <div class="leg-swatch" style="background:var(--pwr)"></div>
+        Power (5V / 3.3V)
+      </div>
+      <div class="leg">
+        <div class="leg-swatch" style="background:var(--gnd)"></div>
+        Ground
+      </div>
+      <div class="leg">
+        <div class="leg-swatch" style="background:var(--sensor)"></div>
+        Ultrasonic sensor
+      </div>
+      <div class="leg">
+        <div class="leg-swatch" style="background:var(--nucleo)"></div>
+        Nucleo board pin
+      </div>
+      <div class="leg">
+        <div class="leg-swatch" style="background:var(--lcd)"></div>
+        LCD
+      </div>
+      <div class="leg">
+        <div class="leg-swatch" style="background:var(--purple)"></div>
+        Pot / MOSFET / Buzzer
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- HC-SR04 -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-stripe" style="background:var(--sensor)"></div>
+          <div>
+            <div class="card-name">HC-SR04 Ultrasonic Sensor</div>
+            <div class="card-desc">trig → PA1 &nbsp;·&nbsp; echo → PA2</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Sensor pin</th>
+              <th>Connects to</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pin-raw">VCC</span></td>
+              <td><span class="chip chip-pwr">5V</span></td>
+              <td class="note">Power</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">GND</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note">Ground</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Trig</span></td>
+              <td>
+                <span class="chip chip-nucleo">A1</span>&nbsp;<span
+                  class="chip chip-sensor"
+                  >PA1</span
+                >
+              </td>
+              <td class="note">Output</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Echo</span></td>
+              <td>
+                <span class="chip chip-nucleo">A7</span>&nbsp;<span
+                  class="chip chip-sensor"
+                  >PA2</span
+                >
+              </td>
+              <td class="note">Input</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LCD -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-stripe" style="background:var(--lcd)"></div>
+          <div>
+            <div class="card-name">LCD Screen (HD44780)</div>
+            <div class="card-desc">
+              4-bit mode &nbsp;·&nbsp; pins 7–10 unused
+            </div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>LCD pin</th>
+              <th>Connects to</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pin-raw">1 VSS</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note">Ground</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">2 VDD</span></td>
+              <td><span class="chip chip-pwr">5V</span></td>
+              <td class="note">Power</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">3 V0</span></td>
+              <td><span class="chip chip-purple">Pot wiper</span></td>
+              <td class="note">Contrast</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">4 RS</span></td>
+              <td>
+                <span class="chip chip-nucleo">A5</span>&nbsp;<span
+                  class="chip chip-lcd"
+                  >PA6</span
+                >
+              </td>
+              <td class="note">Register select</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">5 RW</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note">Write-only</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">6 EN</span></td>
+              <td>
+                <span class="chip chip-nucleo">A6</span>&nbsp;<span
+                  class="chip chip-lcd"
+                  >PA7</span
+                >
+              </td>
+              <td class="note">Enable</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">7–10</span></td>
+              <td><span class="chip chip-nc">N/C</span></td>
+              <td class="note">Not used</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">11 D4</span></td>
+              <td>
+                <span class="chip chip-nucleo">D9</span>&nbsp;<span
+                  class="chip chip-lcd"
+                  >PA8</span
+                >
+              </td>
+              <td class="note">Data bit 0</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">12 D5</span></td>
+              <td>
+                <span class="chip chip-nucleo">D10</span>&nbsp;<span
+                  class="chip chip-lcd"
+                  >PA11</span
+                >
+              </td>
+              <td class="note">Data bit 1</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">13 D6</span></td>
+              <td>
+                <span class="chip chip-nucleo">D11</span>&nbsp;<span
+                  class="chip chip-lcd"
+                  >PB5</span
+                >
+              </td>
+              <td class="note">Data bit 2</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">14 D7</span></td>
+              <td>
+                <span class="chip chip-nucleo">D12</span>&nbsp;<span
+                  class="chip chip-lcd"
+                  >PB4</span
+                >
+              </td>
+              <td class="note">Data bit 3</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">15 A (BL+)</span></td>
+              <td><span class="chip chip-pwr">5V</span></td>
+              <td class="note">Backlight +</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">16 K (BL−)</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note">Backlight −</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Potentiometer -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-stripe" style="background:var(--purple)"></div>
+          <div>
+            <div class="card-name">Contrast Potentiometer</div>
+            <div class="card-desc">Variable resistor → LCD V0</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Pot pin</th>
+              <th>Connects to</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pin-raw">Left</span></td>
+              <td><span class="chip chip-pwr">5V</span></td>
+              <td class="note">High reference</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Middle (wiper)</span></td>
+              <td><span class="chip chip-lcd">LCD pin 3</span></td>
+              <td class="note">Contrast out</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Right</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note">Low reference</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Buzzer & MOSFET -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-stripe" style="background:var(--purple)"></div>
+          <div>
+            <div class="card-name">Buzzer &amp; N-Channel MOSFET</div>
+            <div class="card-desc">G | D | S &nbsp;·&nbsp; gate → A2 (PA3)</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Component pin</th>
+              <th>Connects to</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pin-raw">Gate (G)</span></td>
+              <td>
+                <span class="chip chip-nucleo">A2</span>&nbsp;<span
+                  class="chip chip-purple"
+                  >PA3</span
+                >
+              </td>
+              <td class="note"><b>~100 Ω</b> series</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Gate (G)</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note"><b>10k–100 kΩ</b> pull-down</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Drain (D)</span></td>
+              <td><span class="chip chip-purple">Buzzer −</span></td>
+              <td class="note">Switched output</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Source (S)</span></td>
+              <td><span class="chip chip-gnd">GND rail</span></td>
+              <td class="note">Direct to ground</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Buzzer +</span></td>
+              <td><span class="chip chip-pwr">3.3V</span></td>
+              <td class="note">Power</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Buzzer −</span></td>
+              <td><span class="chip chip-purple">MOSFET Drain</span></td>
+              <td class="note">Switched by FET</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Diode cathode ▌</span></td>
+              <td><span class="chip chip-pwr">3.3V</span></td>
+              <td class="note">Same node as Buzzer +</td>
+            </tr>
+            <tr>
+              <td><span class="pin-raw">Diode anode</span></td>
+              <td><span class="chip chip-purple">MOSFET Drain</span></td>
+              <td class="note">Same node as Buzzer −</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rail-box">
+      <div class="rail-label">Breadboard power rail setup</div>
+      <div class="rail-grid">
+        <div class="rail-item">
+          <div class="rail-dot" style="background:var(--pwr)"></div>
+          <div class="rail-text">
+            <strong style="color:var(--pwr)">Red rail A → 5V</strong>
+            <span>NUCLEO 5V → red (+) rail</span>
+          </div>
+        </div>
+        <div class="rail-item">
+          <div class="rail-dot" style="background:#c08030"></div>
+          <div class="rail-text">
+            <strong style="color:#c08030">Red rail B → 3.3V</strong>
+            <span>NUCLEO 3V3 → other red (+) rail</span>
+          </div>
+        </div>
+        <div class="rail-item">
+          <div class="rail-dot" style="background:var(--gnd)"></div>
+          <div class="rail-text">
+            <strong style="color:var(--gnd)">Blue rail → GND</strong>
+            <span>NUCLEO GND → blue (−) rail</span>
+          </div>
+        </div>
+        <div class="rail-item">
+          <div class="rail-dot" style="background:var(--muted)"></div>
+          <div class="rail-text">
+            <strong style="color:var(--nucleo)">"BB GND" labels</strong>
+            <span>All connect to the shared blue rail</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

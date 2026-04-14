@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diplomacy Map - Hover Tester</title>
+    <style>
+      body {
+          margin: 0;
+          padding: 20px;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+      }
+
+      .container {
+          background: white;
+          border-radius: 15px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          padding: 30px;
+          max-width: 1200px;
+      }
+
+      h1 {
+          margin: 0 0 20px 0;
+          color: #2c3e50;
+          text-align: center;
+      }
+
+      .map-container {
+          position: relative;
+          display: inline-block;
+          border: 3px solid #34495e;
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      #map {
+          display: block;
+          max-width: 100%;
+          height: auto;
+          cursor: crosshair;
+      }
+
+      .info-panel {
+          background: #ecf0f1;
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 20px;
+      }
+
+      .info-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 15px;
+          margin-top: 15px;
+      }
+
+      .info-item {
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+          border-left: 4px solid #3498db;
+      }
+
+      .info-item strong {
+          color: #2c3e50;
+          display: block;
+          margin-bottom: 5px;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+      }
+
+      .info-item .value {
+          color: #3498db;
+          font-size: 24px;
+          font-weight: bold;
+      }
+
+      .province-badge {
+          display: inline-block;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 10px 20px;
+          border-radius: 25px;
+          font-size: 28px;
+          font-weight: bold;
+          margin-top: 10px;
+          box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+      }
+
+      .distance-warning {
+          color: #e74c3c;
+          font-weight: bold;
+          margin-top: 10px;
+      }
+
+      .distance-good {
+          color: #27ae60;
+          font-weight: bold;
+          margin-top: 10px;
+      }
+
+      .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+      }
+
+      .marker {
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          background: rgba(255, 0, 0, 0.7);
+          border: 2px solid white;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🗺️ Diplomacy Map Hover Tester</h1>
+
+      <div class="map-container" id="mapContainer">
+        <img id="map" src="map.png" alt="Diplomacy Map" />
+        <svg class="overlay" id="overlay"></svg>
+      </div>
+
+      <div class="info-panel">
+        <h2 style="margin-top: 0; color: #2c3e50;">Detection Info</h2>
+        <div id="provinceDisplay" style="text-align: center;">
+          <span class="province-badge" id="provinceName"
+            >Hover over map...</span
+          >
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Mouse Position</strong>
+            <div class="value" id="mousePos">—</div>
+          </div>
+          <div class="info-item">
+            <strong>Province Center</strong>
+            <div class="value" id="provinceCenter">—</div>
+          </div>
+          <div class="info-item">
+            <strong>Distance</strong>
+            <div class="value" id="distance">—</div>
+          </div>
+        </div>
+
+        <div
+          id="accuracyFeedback"
+          style="text-align: center; margin-top: 15px;"
+        ></div>
+      </div>
+    </div>
+
+    <script>
+      const PROVINCE_CENTERS = {
+          // ENGLAND
+          "LON": [220, 305], "LVP": [200, 160], "EDI": [225, 110],
+          "CLY": [190, 80],  "YOR": [230, 200], "WAL": [180, 280],
+
+          // FRANCE
+          "PAR": [240, 480], "BRE": [170, 450], "MAR": [260, 600],
+          "PIC": [250, 420], "BUR": [290, 480], "GAS": [210, 560],
+
+          // GERMANY
+          "BER": [520, 390], "MUN": [460, 500], "KIE": [480, 340],
+          "RUH": [400, 430], "PRU": [580, 350], "SIL": [550, 440],
+
+          // ITALY
+          "ROM": [430, 780], "VEN": [430, 680], "NAP": [470, 850],
+          "PIE": [350, 640], "TUS": [400, 730], "APU": [500, 780],
+
+          // AUSTRIA
+          "VIE": [560, 590], "BUD": [630, 640], "TRI": [530, 690],
+          "GAL": [680, 520], "TYR": [500, 580], "BOH": [520, 530],
+
+          // TURKEY
+          "CON": [850, 820], "ANK": [950, 800], "SMY": [930, 900],
+          "SYR": [1050, 880], "ARM": [1100, 750],
+
+          // RUSSIA
+          "MOS": [900, 400], "SEV": [950, 600], "WAR": [680, 430],
+          "STP": [850, 250], "UKR": [800, 530], "LVN": [700, 350],
+          "FIN": [750, 200],
+
+          // NEUTRALS
+          "NOR": [500, 180], "SWE": [580, 220], "DEN": [470, 300],
+          "HOL": [360, 350], "BEL": [320, 390], "SPA": [160, 680],
+          "POR": [90, 650],  "TUN": [350, 950], "GRE": [670, 840],
+          "SER": [640, 740], "BUL": [730, 760], "RUM": [750, 650],
+
+          // SEAS (Water)
+          "NTH": [350, 250], "ENG": [200, 350], "IRI": [120, 250],
+          "NAO": [50, 150],  "NWG": [500, 50],  "BAR": [900, 50],
+          "BAL": [600, 300], "BOT": [650, 200], "SKA": [550, 250],
+          "HEL": [420, 300], "BLA": [900, 700], "AEG": [750, 920],
+          "EAS": [900, 1000], "ION": [600, 950], "ADR": [520, 800],
+          "TYS": [400, 850], "LYO": [300, 750], "WES": [250, 850],
+          "MAO": [50, 550],  "NAF": [200, 950]
+      };
+
+      const map = document.getElementById('map');
+      const overlay = document.getElementById('overlay');
+      const mapContainer = document.getElementById('mapContainer');
+
+      function getClosestProvince(x, y) {
+          let minDist = Infinity;
+          let closest = null;
+
+          for (const [name, [cx, cy]] of Object.entries(PROVINCE_CENTERS)) {
+              const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
+              if (dist < minDist) {
+                  minDist = dist;
+                  closest = { name, center: [cx, cy], distance: dist };
+              }
+          }
+
+          return closest;
+      }
+
+      map.addEventListener('load', function() {
+          // Set overlay size to match image
+          overlay.setAttribute('width', map.width);
+          overlay.setAttribute('height', map.height);
+      });
+
+      map.addEventListener('mousemove', function(e) {
+          const rect = map.getBoundingClientRect();
+          const scaleX = map.naturalWidth / rect.width;
+          const scaleY = map.naturalHeight / rect.height;
+
+          const x = Math.round((e.clientX - rect.left) * scaleX);
+          const y = Math.round((e.clientY - rect.top) * scaleY);
+
+          const result = getClosestProvince(x, y);
+
+          if (result) {
+              // Update display
+              document.getElementById('provinceName').textContent = result.name;
+              document.getElementById('mousePos').textContent = `(${x}, ${y})`;
+              document.getElementById('provinceCenter').textContent = `(${result.center[0]}, ${result.center[1]})`;
+              document.getElementById('distance').textContent = `${result.distance.toFixed(1)} px`;
+
+              // Visual feedback based on distance
+              const feedback = document.getElementById('accuracyFeedback');
+              if (result.distance < 30) {
+                  feedback.innerHTML = '<div class="distance-good">✓ Excellent accuracy</div>';
+              } else if (result.distance < 60) {
+                  feedback.innerHTML = '<div class="distance-good">✓ Good accuracy</div>';
+              } else if (result.distance < 100) {
+                  feedback.innerHTML = '<div style="color: #f39c12; font-weight: bold;">⚠ Fair accuracy</div>';
+              } else {
+                  feedback.innerHTML = '<div class="distance-warning">✗ Poor accuracy - consider adjusting coordinates</div>';
+              }
+
+              // Draw marker at province center
+              overlay.innerHTML = '';
+              const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              const displayX = result.center[0] / scaleX;
+              const displayY = result.center[1] / scaleY;
+              circle.setAttribute('cx', displayX);
+              circle.setAttribute('cy', displayY);
+              circle.setAttribute('r', '6');
+              circle.setAttribute('fill', 'rgba(255, 0, 0, 0.6)');
+              circle.setAttribute('stroke', 'white');
+              circle.setAttribute('stroke-width', '2');
+              overlay.appendChild(circle);
+
+              // Draw line from cursor to center
+              const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+              line.setAttribute('x1', (e.clientX - rect.left));
+              line.setAttribute('y1', (e.clientY - rect.top));
+              line.setAttribute('x2', displayX);
+              line.setAttribute('y2', displayY);
+              line.setAttribute('stroke', 'rgba(255, 0, 0, 0.4)');
+              line.setAttribute('stroke-width', '2');
+              line.setAttribute('stroke-dasharray', '5,5');
+              overlay.appendChild(line);
+          }
+      });
+
+      map.addEventListener('mouseleave', function() {
+          document.getElementById('provinceName').textContent = 'Hover over map...';
+          document.getElementById('mousePos').textContent = '—';
+          document.getElementById('provinceCenter').textContent = '—';
+          document.getElementById('distance').textContent = '—';
+          document.getElementById('accuracyFeedback').innerHTML = '';
+          overlay.innerHTML = '';
+      });
+    </script>
+  </body>
+</html>
